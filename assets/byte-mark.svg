@@ -1,0 +1,6 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="NEXT BYTE mark">
+  <path d="M64 7L113.36 35.5V92.5L64 121L14.64 92.5V35.5L64 7Z" fill="#090908" stroke="#A77C4F" stroke-width="5"/>
+  <path d="M44 39V72" stroke="#D4C2A8" stroke-width="5" stroke-linecap="square"/>
+  <path d="M44 39L84 72V39" stroke="#D4C2A8" stroke-width="5" stroke-linecap="square" stroke-linejoin="miter"/>
+  <text x="64" y="88" text-anchor="middle" font-family="Arial Narrow, Arial, sans-serif" font-size="19" font-weight="700" letter-spacing="2" fill="#D4C2A8">BYTE</text>
+</svg>
