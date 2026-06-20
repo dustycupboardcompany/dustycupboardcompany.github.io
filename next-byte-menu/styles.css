@@ -1,0 +1,3669 @@
+:root{
+  --bg:#020609;
+  --panel:#071016cc;
+  --cyan:#02d9ff;
+  --cyan-dim:rgba(2,217,255,.22);
+  --amber:#ff9f27;
+  --text:#d7edf4;
+  --muted:#7d9198;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;touch-action:manipulation}
+html,body{width:100%;height:100%;margin:0;overflow:hidden}
+body{
+  display:grid;
+  place-items:center;
+  background:radial-gradient(circle at 50% -15%,#19303b 0,#061016 38reviewTopBackBtn%,#010305 100%);
+  color:var(--text);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial,sans-serif;
+}
+.terminal-shell{
+  width:min(100vw,calc(100vh * 16 / 9));
+  height:min(100vh,calc(100vw * 9 / 16));
+  aspect-ratio:16/9;
+  padding:8px;
+}
+.screen-frame{
+  position:relative;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  padding:18px 25px;
+  border:2px solid #1f2c31;
+  border-radius:30px;
+  background:
+    radial-gradient(circle at 22% 8%,rgba(0,217,255,.08),transparent 32%),
+    linear-gradient(180deg,#0b1115,#020405 88%);
+  box-shadow:0 0 0 8px #0a0d0f inset,0 0 0 14px #1d2225 inset,0 30px 70px #000;
+}
+.screen-frame:before{
+  content:"";
+  position:absolute;
+  inset:18px;
+  border:1px solid #133646;
+  border-radius:20px;
+  box-shadow:0 0 25px #001e2b inset;
+  pointer-events:none;
+  z-index:2;
+}
+.noise{
+  position:absolute;
+  inset:0;
+  opacity:.15;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px),
+    radial-gradient(circle at 20% 10%,#00d5ff33,transparent 30%),
+    radial-gradient(circle at 90% 70%,#ff9a0030,transparent 24%);
+  background-size:100% 3px,4px 100%,100% 100%,100% 100%;
+  mix-blend-mode:screen;
+}
+
+/* Header */
+.topbar{
+  position:absolute;
+  left:34px;
+  right:34px;
+  top:24px;
+  height:102px;
+  z-index:30;
+}
+.brand{
+  position:absolute;
+  left:0;
+  top:14px;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  height:58px;
+}
+.byte-logo{
+  font-size:34px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:7px;
+  color:#f3fbff;
+  text-shadow:0 0 10px rgba(255,255,255,.35);
+}
+.divider{height:35px;width:2px;background:#d8edf4aa}
+.brand b{display:block;font-size:12px;letter-spacing:2px;color:#c5d4d8}
+.brand small{display:block;margin-top:3px;color:var(--cyan);font-size:10px;letter-spacing:1.8px}
+
+/* Integrated Bitstream */
+.bitstream-drawer{
+  position:absolute;
+  top:0;
+  right:0;
+  width:548px;
+  min-height:92px;
+  padding:10px 15px 10px;
+  overflow:hidden;
+  border:1px solid rgba(0,217,255,.12);
+  border-radius:12px;
+  background:
+    linear-gradient(180deg,rgba(4,16,22,.68),rgba(2,8,12,.56)),
+    radial-gradient(circle at 14% 18%,rgba(0,217,255,.08),transparent 30%),
+    radial-gradient(circle at 86% 62%,rgba(0,217,255,.04),transparent 24%);
+  box-shadow:inset 0 0 22px rgba(0,0,0,.48),inset 0 1px 0 rgba(255,255,255,.03),0 0 12px rgba(0,217,255,.03);
+  transition:top .5s cubic-bezier(.16,.9,.14,1),left .5s cubic-bezier(.16,.9,.14,1),right .5s cubic-bezier(.16,.9,.14,1),width .5s cubic-bezier(.16,.9,.14,1),min-height .5s cubic-bezier(.16,.9,.14,1),padding .5s cubic-bezier(.16,.9,.14,1);
+}
+.drawer-head{height:16px;display:flex;align-items:center;justify-content:space-between}
+.panel-label,.section-title,h3{color:var(--cyan);font-weight:800;font-size:11px;letter-spacing:2px}
+.drawer-back{opacity:0;pointer-events:none;border:1px solid #0b5b69;background:#061114;color:var(--cyan);font-weight:900;letter-spacing:2px;border-radius:6px;height:28px;padding:0 16px;box-shadow:0 0 18px rgba(0,217,255,.12) inset}
+.bitstream-viewport{
+  position:relative;
+  height:41px;
+  margin:6px 0 5px;
+  overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 8%,#000 86%,transparent 100%);
+  mask-image:linear-gradient(90deg,transparent 0%,#000 8%,#000 86%,transparent 100%);
+}
+.bitstream-drawer:after{
+  content:"";
+  position:absolute;
+  right:9px;
+  top:30px;
+  width:74px;
+  height:41px;
+  pointer-events:none;
+  z-index:4;
+  background:linear-gradient(90deg,rgba(5,16,22,0),rgba(5,16,22,.55) 58%,rgba(5,16,22,.92));
+}
+.bitstream-track{display:flex;gap:8px;align-items:center;min-height:40px;width:max-content;will-change:transform}
+.idle-scroll{animation:bitstreamCrawl 68s linear infinite}
+@keyframes bitstreamCrawl{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.byte-wrap{position:relative;display:flex;align-items:center;min-height:39px;border:1px solid transparent;border-radius:8px;padding:5px;background:#040a0dcc;box-shadow:0 0 10px rgba(0,217,255,.06) inset}
+.byte-wrap:before{content:"";position:absolute;inset:0;border-radius:8px;border:1px dashed var(--amber);opacity:calc(.10 + (var(--byte-progress,0) * .36));clip-path:polygon(0 0,var(--byte-trace,0%) 0,var(--byte-trace,0%) 100%,0 100%);box-shadow:0 0 18px rgba(255,159,39,.12) inset;pointer-events:none}
+.byte-wrap.locked:before{clip-path:none;opacity:.88}
+.byte-body{display:flex;gap:5px}
+.byte-label{display:none!important}
+.nybble-wrap{position:relative;border-radius:6px;padding:3px;background:#03080b}
+.nybble-wrap:before{content:"";position:absolute;inset:0;border-radius:6px;border:1px solid var(--cyan);opacity:calc(.10 + (var(--nybble-progress,0) * .42));clip-path:polygon(0 0,var(--nybble-trace,0%) 0,var(--nybble-trace,0%) 100%,0 100%);box-shadow:0 0 13px rgba(0,217,255,.12) inset;pointer-events:none}
+.nybble-wrap.locked:before{clip-path:none;opacity:.9}
+.nybble-label{display:none;position:absolute;top:1px;right:6px;text-align:right;color:#cfeaf0;font-size:8px;letter-spacing:1.1px;white-space:nowrap;z-index:2}
+.nybble-row{display:flex;gap:4px;position:relative;z-index:1}
+.slot,.bit-tile{width:31px;height:23px;border:1px solid #1b4350;border-radius:5px;display:grid;place-items:center;font-weight:900;font-size:14px;letter-spacing:1px;background:#050a0d;box-shadow:0 0 12px rgba(0,217,255,.10) inset}
+.slot.empty{border-style:dashed;opacity:.45;color:transparent}
+.bit-tile.cyan{border-color:#0ccdf6;color:var(--cyan);box-shadow:0 0 16px rgba(0,217,255,.26) inset,0 0 12px rgba(0,217,255,.12)}
+.bit-tile.amber{border-color:var(--amber);color:#ffac35;box-shadow:0 0 16px rgba(255,159,39,.26) inset,0 0 12px rgba(255,159,39,.12)}
+.review-btn,.back-btn,.complete-btn{border:1px solid #0b5b69;background:#061114;color:var(--cyan);font-weight:900;letter-spacing:2px;border-radius:6px;height:29px;padding:0 18px;cursor:pointer;box-shadow:0 0 18px rgba(0,217,255,.12) inset}
+.review-btn{width:332px;margin-left:76px}
+.review-btn.ready{background:linear-gradient(90deg,#032232,#063747);border-color:#07c6e8;box-shadow:0 0 24px rgba(0,217,255,.28) inset,0 0 12px rgba(0,217,255,.18)}
+.insert-gate{position:absolute;right:12px;top:33px;width:52px;height:34px;border:1px solid rgba(255,159,39,.30);border-radius:8px;background:radial-gradient(circle at 50% 50%,rgba(255,159,39,.18),transparent 58%),linear-gradient(180deg,#171007cc,#060403ee);display:grid;place-items:center;opacity:0;pointer-events:none;z-index:5}
+.insert-gate.active{animation:gateOpen .4s cubic-bezier(.19,1,.22,1) forwards}
+.insert-gate.merge{animation:gateSwallow .48s cubic-bezier(.19,1,.22,1) forwards}
+
+/* Menu shell */
+.menu-view{
+  position:absolute;
+  left:34px;
+  right:34px;
+  top:118px;
+  bottom:20px;
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+  z-index:10;
+}
+.navrow{
+  flex:0 0 42px;
+  height:42px;
+  display:flex;
+  align-items:flex-end;
+  gap:26px;
+  max-width:820px;
+  margin:0 0 7px 18px;
+  padding:0;
+}
+.mode-tab,.age-btn{border:0;background:transparent;color:#5f6d72;font-weight:900;letter-spacing:2.4px}
+.mode-tab{height:34px;padding:0 17px;border-bottom:2px solid transparent}
+.mode-tab.active{color:var(--cyan);border-bottom-color:var(--cyan);text-shadow:0 0 10px rgba(0,217,255,.80)}
+.cube-icon,.bolt-icon{font-size:22px;margin-right:9px;vertical-align:-3px}
+.age-toggle{display:flex;gap:10px;margin-left:4px}
+.age-btn{height:26px;min-width:112px;border:1px solid #263338;border-radius:5px;background:#03070a;color:#7c888d}
+.age-btn.active{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 12px rgba(0,217,255,.18) inset}
+.hidden{display:none!important}
+.category-mount{flex:1 1 auto;min-height:0;width:100%;display:flex;flex-direction:column;gap:6px}
+.section-title{height:16px;line-height:16px;flex:0 0 16px;margin:0;color:var(--cyan);font-size:11px;letter-spacing:2.3px}
+.section-title:before{content:"› ";color:var(--cyan)}
+.grid{display:grid;gap:12px}
+
+/* Cards */
+.item-card{position:relative;min-height:0;overflow:hidden;border:1px solid rgba(27,75,87,.48);border-radius:9px;background:linear-gradient(180deg,rgba(7,17,22,.78),rgba(3,6,7,.88));box-shadow:0 0 18px #000 inset;cursor:pointer}
+.item-card:active{transform:scale(.985)}
+.item-card.kicker{border-color:rgba(255,159,39,.24);background:radial-gradient(circle at 50% 28%,rgba(0,217,255,.08),transparent 42%),linear-gradient(180deg,rgba(8,18,23,.86),rgba(3,7,9,.94));box-shadow:inset 0 0 18px rgba(0,0,0,.72),inset 0 1px 0 rgba(255,255,255,.025)}
+.code{position:absolute;left:14px;top:10px;color:var(--cyan);font-weight:900;font-size:30px;line-height:1;text-shadow:0 0 12px rgba(0,217,255,.48);z-index:2}
+.item-card.kicker .code,.item-card.kicker .price{color:var(--amber);text-shadow:0 0 10px rgba(255,159,39,.25)}
+.item-img{position:absolute;left:10%;top:10%;width:80%;height:48%;object-fit:contain;object-position:center center;filter:drop-shadow(0 16px 18px #000)}
+.item-info{position:absolute;left:16px;right:50px;bottom:13px}
+.item-name{font-size:14px;line-height:1.05;color:#e2ecee}
+.price{margin-top:5px;font-size:12px;color:#bfcbd0}
+.plus{position:absolute;right:10px;bottom:10px;width:29px;height:29px;border:1px solid rgba(0,217,255,.36);border-radius:6px;background:#061114;color:var(--cyan);font-size:22px;line-height:1}
+.item-card.kicker .plus{border-color:rgba(255,159,39,.38);color:var(--amber)}
+.mini-tag{position:absolute;right:9px;top:8px;padding:2px 4px;border:1px solid rgba(0,217,255,.42);border-radius:3px;color:var(--cyan);font-size:7px;letter-spacing:1px;background:rgba(4,16,21,.8);z-index:3}
+
+/* Payload */
+.category-mount.payload-layout .grid.food{flex:1 1 auto;min-height:0;width:100%;height:100%;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:12px}
+.category-mount.payload-layout .grid.food .item-card{height:100%;min-height:0}
+.category-mount.payload-layout .grid.food .item-img{left:10%;top:10%;width:80%;height:44%}
+
+/* Kicker deterministic layout */
+.category-mount.kicker-layout{
+  display:grid;
+  grid-template-rows:16px 148px 186px 16px 136px;
+  gap:7px;
+  align-content:start;
+  min-height:0;
+}
+.category-mount.kicker-layout > *{min-width:0;min-height:0}
+.category-mount.kicker-layout .grid.drinks6{height:148px;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:148px;gap:12px}
+.category-mount.kicker-layout .grid.drinks3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.category-mount.kicker-layout .grid.drinks5{grid-template-columns:repeat(5,minmax(0,1fr))}
+.category-mount.kicker-layout .grid.drinks6 .item-card{height:148px;min-height:148px;max-height:148px}
+.category-mount.kicker-layout .grid.drinks6 .item-img{left:16%;top:7%;width:68%;height:64%}
+.category-mount.kicker-layout .grid.drinks6 .item-info{left:14px;right:44px;bottom:10px}
+.category-mount.kicker-layout .grid.drinks6 .item-name{font-size:13.5px;line-height:1.03}
+.category-mount.kicker-layout .grid.drinks6 .price{font-size:11.5px;margin-top:2px}
+.category-mount.kicker-layout .grid.drinks6 .code{font-size:29px;left:12px;top:8px}
+
+/* Escape Rūm */
+.quest-band{position:relative;height:186px;min-height:186px;max-height:186px;display:grid;grid-template-columns:330px minmax(0,1fr);gap:12px;margin:0;padding:12px 14px;border:1px solid rgba(0,217,255,.78);border-radius:12px;background:radial-gradient(circle at 9% 50%,rgba(0,217,255,.16),transparent 30%),radial-gradient(circle at 97% 50%,rgba(0,217,255,.08),transparent 24%),linear-gradient(90deg,rgba(4,19,27,.98) 0%,rgba(5,20,28,.92) 36%,rgba(3,13,18,.94) 100%);box-shadow:inset 0 0 30px rgba(0,217,255,.18),0 0 22px rgba(0,217,255,.18);overflow:hidden}
+.quest-band:before{content:"";position:absolute;inset:-2px;background:linear-gradient(90deg,transparent,rgba(0,217,255,.20),transparent);transform:translateX(-100%);animation:questSweep 6.5s linear infinite}
+.quest-band:after{content:"";position:absolute;inset:8px;border-radius:8px;border:1px solid rgba(0,217,255,.18);clip-path:polygon(18px 0,calc(100% - 18px) 0,100% 18px,100% calc(100% - 18px),calc(100% - 18px) 100%,18px 100%,0 calc(100% - 18px),0 18px);box-shadow:inset 0 0 16px rgba(0,217,255,.16),0 0 10px rgba(0,217,255,.10);pointer-events:none}
+.quest-title{position:relative;z-index:2;display:flex;align-items:center;gap:18px;padding:0}
+.quest-emblem{position:relative;width:92px;height:92px;flex:0 0 92px;border:2px solid rgba(0,217,255,.78);border-radius:50%;display:grid;place-items:center;color:#ffcc74;box-shadow:inset 0 0 22px rgba(0,217,255,.18),0 0 20px rgba(0,217,255,.20)}
+.quest-emblem:before{content:"";position:absolute;inset:13px;border:1px solid rgba(255,159,39,.40);border-radius:50%}
+.quest-copy b{display:block;color:var(--cyan);font-size:28px;line-height:.95;letter-spacing:5px;text-shadow:0 0 12px rgba(0,217,255,.35)}
+.quest-copy span{display:block;margin-top:8px;color:#ffb548;font-size:12px}
+.quest-copy p{display:block;margin:15px 0 0 0;max-width:230px;color:#d7e5ea;font-size:12px;line-height:1.32}
+.quest-card-grid{position:relative;z-index:2;height:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.quest-card-grid .item-card{height:160px;min-height:160px;max-height:160px;align-self:center;background:radial-gradient(circle at 50% 28%,rgba(0,217,255,.08),transparent 44%),linear-gradient(180deg,rgba(8,18,23,.76),rgba(3,8,10,.90));border-color:rgba(0,217,255,.20)}
+.quest-card-grid .item-img{left:18%;top:7%;width:64%;height:62%}
+.quest-card-grid .item-info{left:14px;right:44px;bottom:10px}
+.quest-card-grid .item-name{font-size:13px;line-height:1.04}
+.quest-card-grid .price{font-size:11px;margin-top:3px}
+
+/* Specialty */
+.category-mount.kicker-layout .grid.compact-specialty{height:136px;min-height:136px;grid-template-rows:136px;gap:12px;margin:0;padding:0}
+.category-mount.kicker-layout.allages-layout .grid.compact-specialty{grid-template-columns:repeat(3,minmax(0,1fr))}
+.category-mount.kicker-layout.adult-layout .grid.compact-specialty{grid-template-columns:repeat(5,minmax(0,1fr))}
+.category-mount.kicker-layout .grid.compact-specialty .item-card{height:136px;min-height:136px;max-height:136px}
+.category-mount.kicker-layout .grid.compact-specialty .item-img{left:16%;top:8%;width:56%;height:64%}
+.category-mount.kicker-layout .grid.compact-specialty .item-info{left:14px;right:44px;bottom:10px}
+.category-mount.kicker-layout .grid.compact-specialty .item-name{font-size:13px;line-height:1.03}
+.category-mount.kicker-layout .grid.compact-specialty .price{font-size:11px;margin-top:3px}
+.category-mount.kicker-layout .grid.compact-specialty .code{font-size:28px;left:12px;top:8px}
+
+/* Review */
+.screen-frame.review-open .bitstream-drawer{top:22px;left:34px;right:34px;width:calc(100% - 68px);min-height:72px;padding:9px 15px 9px;z-index:40}
+.screen-frame.review-open .drawer-head{height:13px}
+.screen-frame.review-open .drawer-back{opacity:1;pointer-events:auto;height:26px;font-size:11px}
+.screen-frame.review-open .review-btn,.screen-frame.review-open .insert-gate{opacity:0;pointer-events:none}
+.screen-frame.review-open .bitstream-drawer:after{display:none}
+.screen-frame.review-open .bitstream-viewport{height:39px;margin:5px 0 0;overflow:visible;-webkit-mask-image:none;mask-image:none}
+.screen-frame.review-open .bitstream-track{width:100%;gap:10px;justify-content:flex-start;flex-wrap:nowrap;animation:none!important;transform:none!important}
+.screen-frame.review-open .loop-clone{display:none!important}
+.screen-frame.review-open .byte-wrap{min-height:36px;padding:7px 7px 4px;background:#03080bcc}
+.screen-frame.review-open .byte-wrap:not(:last-child){margin-right:16px}
+.screen-frame.review-open .byte-wrap:not(:last-child):after{content:"";position:absolute;right:-20px;top:50%;width:12px;height:2px;border-radius:2px;background:var(--cyan);box-shadow:0 0 8px rgba(0,217,255,.7)}
+.screen-frame.review-open .nybble-wrap{padding:10px 4px 4px}
+.screen-frame.review-open .nybble-label{display:block;top:1px;left:auto;right:6px;text-align:right}
+.screen-frame.review-open .slot,.screen-frame.review-open .bit-tile{width:28px;height:20px;font-size:12px}
+.review-view{position:absolute;left:34px;right:34px;top:108px;bottom:28px;z-index:10}
+.review-columns{width:100%;height:100%;display:grid;grid-template-columns:1.18fr .82fr;gap:14px;min-height:0}
+.review-list-panel,.summary-panel{width:100%;height:100%;min-height:0;padding:11px 12px;overflow:hidden;display:flex;flex-direction:column;border:1px solid #143843;border-radius:10px;background:#051015cc;box-shadow:0 0 26px #001b24 inset}
+.review-list-panel h3,.summary-panel h3{flex:0 0 auto;margin:0 0 8px;font-size:11px}
+.review-list{flex:1 1 auto;min-height:0;height:auto;overflow-y:auto;overflow-x:hidden;padding-right:6px;scrollbar-width:thin;scrollbar-color:rgba(0,217,255,.42) #081217}
+.review-list::-webkit-scrollbar,.summary-grid-wrap::-webkit-scrollbar{width:8px}
+.review-list::-webkit-scrollbar-track,.summary-grid-wrap::-webkit-scrollbar-track{background:#081217;border-radius:8px}
+.review-list::-webkit-scrollbar-thumb,.summary-grid-wrap::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#0caac8,#04556c);border-radius:8px}
+.review-row{min-height:48px;display:grid;grid-template-columns:20px 34px 44px 1fr 68px 24px;gap:9px;align-items:center;border-bottom:1px solid #0e2228;position:relative}
+.review-row.drag-source{opacity:.25}
+.review-row.drop-before:before,.review-row.drop-after:after{content:"";position:absolute;left:0;right:0;height:2px;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.review-row.drop-before:before{top:0}.review-row.drop-after:after{bottom:0}
+.drag-handle{color:rgba(0,217,255,.55);font-size:20px}
+.thumb{width:44px;height:34px;object-fit:contain}
+.row-name{font-size:15px;line-height:1.08;color:#e8f8ff}
+.tag{font-size:8px;margin-left:8px;color:var(--cyan);border:1px solid rgba(0,217,255,.36);padding:2px 4px;border-radius:3px}
+.remove{border:0;background:transparent;color:#9fb1b7;font-size:23px}
+.drag-ghost{position:fixed;z-index:99;pointer-events:none;background:#06151b;border:1px solid var(--cyan);border-radius:7px;padding:9px 15px;color:#dff7ff;box-shadow:0 0 30px rgba(0,217,255,.34)}
+.summary-grid-wrap{flex:0 0 124px;width:100%;margin:2px 0 8px;padding:8px;overflow:hidden;border-radius:18px;background:radial-gradient(circle at 28% 18%,rgba(5,18,28,.95),rgba(2,7,10,.98) 75%);border:1px solid #0b1f27;box-shadow:0 0 18px rgba(0,217,255,.08) inset}
+.summary-grid{display:flex;flex-direction:column;gap:5px;width:100%}
+.summary-row{display:flex;align-items:center;gap:4px}
+.summary-nibble{display:flex;gap:4px}
+.summary-sep{width:10px;flex:0 0 10px;height:2px;border-radius:2px;background:#6e7a80}
+.summary-byte-space{width:14px;flex:0 0 14px}
+.summary-cell{width:20px;height:20px;border:1px solid #2a3d44;border-radius:4px;display:grid;place-items:center;color:var(--cyan);font-weight:900;background:#03080b;font-size:11px}
+.summary-cell.amber{color:var(--amber);border-color:var(--amber)}
+.count-line{flex:0 0 auto;margin:0 0 6px;font-size:14px;line-height:1.05;color:#dff5fb}
+.count-line span{color:#dff5fb}
+.totals{flex:0 0 auto;border-top:1px solid #143843;padding-top:7px}
+.totals div{display:flex;justify-content:space-between;margin:4px 0;color:#9fb4bb;letter-spacing:1px;font-size:12px}
+.totals b{color:#dff7ff}
+.total-row{border-top:1px solid #143843;padding-top:6px}
+.total-row span,.total-row b{color:var(--cyan)}
+.total-row b{font-size:19px}
+.complete-btn{width:100%;height:40px;min-height:40px;background:linear-gradient(180deg,#0bc9ff,#0099d4);color:#002733;border:0;font-size:13px;margin-top:7px}
+.complete-btn small{display:block;font-size:7px;letter-spacing:2px}
+#summaryBackBtn{width:100%;height:32px;min-height:32px;margin-top:7px;font-size:11px}
+.toast{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:99;background:#001820;border:1px solid var(--cyan);color:var(--cyan);border-radius:9px;padding:22px 34px;font-weight:900;letter-spacing:3px;box-shadow:0 0 40px rgba(0,217,255,.34)}
+.flyer{position:fixed;z-index:999;width:34px;height:27px;display:grid;place-items:center;border:1px solid var(--cyan);border-radius:7px;background:#061114;color:var(--cyan);font-weight:900;box-shadow:0 0 24px rgba(0,217,255,.47) inset,0 0 18px rgba(0,217,255,.27);transition:left .72s cubic-bezier(.16,.9,.14,1),top .72s cubic-bezier(.28,.86,.18,1),opacity .72s ease,transform .72s cubic-bezier(.19,1,.22,1)}
+.flyer.amber{border-color:var(--amber);color:#ffac35;box-shadow:0 0 24px rgba(255,159,39,.47) inset,0 0 18px rgba(255,159,39,.27)}
+@keyframes questSweep{0%{transform:translateX(-105%)}38%,100%{transform:translateX(105%)}}
+@keyframes gateOpen{0%{opacity:0;transform:translateX(12px) scale(.86)}100%{opacity:1;transform:translateX(0) scale(1)}}
+@keyframes gateSwallow{0%{opacity:1;transform:translateX(0) scale(1)}100%{opacity:0;transform:translateX(-32px) scale(.72);filter:blur(3px)}}
+
+@media (max-height:760px){
+  .topbar{top:22px;height:98px}
+  .menu-view{top:110px;bottom:20px}
+  .bitstream-drawer{width:516px;min-height:88px}
+  .category-mount.kicker-layout{grid-template-rows:16px 136px 172px 16px 124px;gap:5px}
+  .category-mount.kicker-layout .grid.drinks6,.category-mount.kicker-layout .grid.drinks6 .item-card{height:136px;min-height:136px;max-height:136px}
+  .quest-band{height:172px;min-height:172px;max-height:172px;grid-template-columns:290px minmax(0,1fr)}
+  .quest-card-grid .item-card{height:148px;min-height:148px;max-height:148px}
+  .category-mount.kicker-layout .grid.compact-specialty,.category-mount.kicker-layout .grid.compact-specialty .item-card{height:124px;min-height:124px;max-height:124px}
+  .review-view{top:102px;bottom:20px}
+}
+
+
+/* =========================================================
+   Kicker category structure fix
+   Wrap top and bottom categories as true structural groups:
+   - top group: label + A-F / M-R
+   - middle group: Escape Rūm only
+   - bottom group: label + J-L / V-Z
+   ========================================================= */
+
+/* Kicker page now has three structural bands. */
+.category-mount.kicker-layout{
+  grid-template-rows: 156px 186px 146px !important;
+  gap:10px !important;
+  align-content:stretch !important;
+}
+
+/* True category containers for top and bottom sections. */
+.kicker-category-group{
+  min-width:0;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  padding:10px 12px 12px;
+  border:1px solid rgba(0,217,255,.22);
+  border-radius:16px;
+  background:
+    linear-gradient(180deg, rgba(4,16,22,.20), rgba(2,8,12,.14)),
+    radial-gradient(circle at 18% 16%, rgba(0,217,255,.045), transparent 30%);
+  box-shadow:
+    inset 0 0 18px rgba(0,217,255,.055),
+    0 0 10px rgba(0,217,255,.035);
+  overflow:hidden;
+  position:relative;
+}
+.kicker-category-group::after{
+  content:"";
+  position:absolute;
+  inset:4px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.03);
+  pointer-events:none;
+}
+
+.kicker-category-group .section-title{
+  flex:0 0 16px;
+  height:16px;
+  line-height:16px;
+  margin:0;
+  padding:0 0 0 4px;
+  background:none !important;
+  border:none !important;
+  border-radius:0 !important;
+}
+.kicker-category-group .section-title::before{
+  content:"› ";
+  color:var(--cyan);
+}
+
+/* The inner grids live cleanly inside the category groups. */
+.kicker-category-group .grid{
+  flex:1 1 auto;
+  min-height:0;
+  height:100%;
+  margin:0;
+  padding:0;
+  border:none !important;
+  background:none !important;
+  box-shadow:none !important;
+  overflow:visible;
+}
+.kicker-category-group .grid::before,
+.kicker-category-group .grid::after{
+  display:none !important;
+}
+
+/* Top category grid */
+.kicker-category-group.top-category .grid.drinks6{
+  height:100% !important;
+  min-height:0 !important;
+  grid-template-columns:repeat(6, minmax(0, 1fr)) !important;
+  grid-auto-rows:1fr !important;
+  gap:12px !important;
+}
+.kicker-category-group.top-category .grid.drinks6 .item-card{
+  height:100% !important;
+  min-height:0 !important;
+  max-height:none !important;
+}
+
+/* Bottom category grid */
+.kicker-category-group.bottom-category .grid.compact-specialty{
+  height:100% !important;
+  min-height:0 !important;
+  grid-auto-rows:1fr !important;
+  gap:12px !important;
+}
+.category-mount.kicker-layout.allages-layout .kicker-category-group.bottom-category .grid.compact-specialty{
+  grid-template-columns:repeat(3, minmax(0,1fr)) !important;
+}
+.category-mount.kicker-layout.adult-layout .kicker-category-group.bottom-category .grid.compact-specialty{
+  grid-template-columns:repeat(5, minmax(0,1fr)) !important;
+}
+.kicker-category-group.bottom-category .grid.compact-specialty .item-card{
+  height:100% !important;
+  min-height:0 !important;
+  max-height:none !important;
+}
+
+/* Escape Rūm remains its own independent category in the middle. */
+.category-mount.kicker-layout > .quest-band{
+  height:100% !important;
+  min-height:0 !important;
+  max-height:none !important;
+  margin:0 !important;
+  align-self:stretch !important;
+}
+
+/* Keep image sizing balanced after the structural regrouping. */
+.kicker-category-group.top-category .grid.drinks6 .item-img{
+  top:7% !important;
+  height:62% !important;
+}
+.kicker-category-group.bottom-category .grid.compact-specialty .item-img{
+  top:8% !important;
+  height:60% !important;
+}
+.kicker-category-group .item-info{
+  bottom:10px !important;
+}
+
+/* Small-screen proportion pass */
+@media (max-height:760px){
+  .category-mount.kicker-layout{
+    grid-template-rows: 144px 172px 132px !important;
+    gap:8px !important;
+  }
+}
+
+
+/* =========================================================
+   Kicker spacing / sizing cleanup
+   Fixes clipped cards and unused bottom space by making the
+   three main Kicker regions scale proportionally within the
+   available viewport instead of relying on rigid pixel bands.
+   ========================================================= */
+
+/* Use a little more of the available vertical space. */
+.menu-view{
+  bottom:14px !important;
+}
+
+/* Three proportional bands that fill the region cleanly. */
+.category-mount.kicker-layout{
+  height:100% !important;
+  min-height:0 !important;
+  display:grid !important;
+  grid-template-rows:
+    minmax(0, 1.02fr)
+    minmax(0, 1.18fr)
+    minmax(0, .96fr) !important;
+  gap:8px !important;
+  align-content:stretch !important;
+  overflow:hidden !important;
+}
+
+/* Category wrappers: slightly tighter padding so the contents fit. */
+.kicker-category-group{
+  min-height:0 !important;
+  padding:8px 12px 10px !important;
+  gap:6px !important;
+  overflow:hidden !important;
+}
+
+.kicker-category-group .section-title{
+  flex:0 0 14px !important;
+  height:14px !important;
+  line-height:14px !important;
+  padding:0 0 0 4px !important;
+  font-size:10px !important;
+  letter-spacing:2.2px !important;
+}
+
+/* Inner grids fill their wrapper without phantom extra height. */
+.kicker-category-group .grid{
+  height:auto !important;
+  min-height:0 !important;
+  flex:1 1 auto !important;
+  align-items:stretch !important;
+}
+
+.kicker-category-group.top-category .grid.drinks6{
+  height:100% !important;
+  min-height:0 !important;
+  grid-template-columns:repeat(6, minmax(0,1fr)) !important;
+  grid-auto-rows:1fr !important;
+  gap:12px !important;
+}
+
+.kicker-category-group.bottom-category .grid.compact-specialty{
+  height:100% !important;
+  min-height:0 !important;
+  grid-auto-rows:1fr !important;
+  gap:12px !important;
+}
+
+/* Let the cards size from the region rather than fixed remnants. */
+.kicker-category-group .item-card,
+.quest-card-grid .item-card{
+  height:100% !important;
+  min-height:0 !important;
+  max-height:none !important;
+}
+
+/* Tighter card content so titles / prices stay visible. */
+.kicker-category-group.top-category .grid.drinks6 .item-img{
+  top:7% !important;
+  height:58% !important;
+}
+.kicker-category-group.bottom-category .grid.compact-specialty .item-img{
+  top:8% !important;
+  height:52% !important;
+}
+.kicker-category-group .item-info{
+  left:14px !important;
+  right:42px !important;
+  bottom:8px !important;
+}
+.kicker-category-group .item-name{
+  font-size:12px !important;
+  line-height:1.03 !important;
+}
+.kicker-category-group .price{
+  font-size:11px !important;
+  margin-top:3px !important;
+}
+.kicker-category-group .plus{
+  right:10px !important;
+  bottom:8px !important;
+}
+
+/* Escape Rūm region also becomes more compact and aligned. */
+.category-mount.kicker-layout > .quest-band{
+  height:100% !important;
+  min-height:0 !important;
+  max-height:none !important;
+  padding:10px 12px !important;
+  grid-template-columns:300px minmax(0,1fr) !important;
+  gap:10px !important;
+  overflow:hidden !important;
+}
+
+.quest-title{
+  gap:16px !important;
+}
+.quest-emblem{
+  width:84px !important;
+  height:84px !important;
+  flex:0 0 84px !important;
+}
+.quest-copy b{
+  font-size:24px !important;
+  letter-spacing:4px !important;
+}
+.quest-copy span{
+  font-size:11px !important;
+  margin-top:7px !important;
+}
+.quest-copy p{
+  font-size:11px !important;
+  line-height:1.28 !important;
+  margin-top:12px !important;
+  max-width:215px !important;
+}
+
+.quest-card-grid{
+  height:100% !important;
+  min-height:0 !important;
+  gap:9px !important;
+}
+.quest-card-grid .item-img{
+  top:8% !important;
+  height:54% !important;
+}
+.quest-card-grid .item-info{
+  left:14px !important;
+  right:42px !important;
+  bottom:8px !important;
+}
+.quest-card-grid .item-name{
+  font-size:12.5px !important;
+  line-height:1.03 !important;
+}
+.quest-card-grid .price{
+  font-size:11px !important;
+  margin-top:3px !important;
+}
+
+/* Small-screen proportional pass */
+@media (max-height:760px){
+  .menu-view{
+    bottom:10px !important;
+  }
+  .category-mount.kicker-layout{
+    grid-template-rows:
+      minmax(0, 1.00fr)
+      minmax(0, 1.15fr)
+      minmax(0, .94fr) !important;
+    gap:7px !important;
+  }
+  .category-mount.kicker-layout > .quest-band{
+    grid-template-columns:272px minmax(0,1fr) !important;
+    gap:8px !important;
+  }
+  .quest-emblem{
+    width:76px !important;
+    height:76px !important;
+    flex:0 0 76px !important;
+  }
+  .quest-copy b{
+    font-size:22px !important;
+  }
+}
+
+
+/* =========================================================
+   Review / Order Summary refactor pass
+   Brings the review state closer to the concept art:
+   - thinner full-width Bitstream ribbon
+   - top-right Back button detached from the ribbon
+   - cleaner two-column review layout
+   - larger order summary grid
+   - stronger count line / totals / action buttons
+   ========================================================= */
+
+.screen-frame.review-open .bitstream-drawer{
+  top:54px !important;
+  left:34px !important;
+  right:34px !important;
+  width:calc(100% - 68px) !important;
+  min-height:84px !important;
+  padding:10px 18px 12px !important;
+  border-radius:16px !important;
+  border-color:rgba(0,217,255,.18) !important;
+  background:
+    linear-gradient(180deg, rgba(3,13,18,.86), rgba(2,8,12,.72)),
+    radial-gradient(circle at 12% 20%, rgba(0,217,255,.08), transparent 24%),
+    radial-gradient(circle at 90% 50%, rgba(0,217,255,.04), transparent 18%) !important;
+  box-shadow:
+    inset 0 0 28px rgba(0,0,0,.45),
+    inset 0 1px 0 rgba(255,255,255,.03),
+    0 0 10px rgba(0,217,255,.03) !important;
+  z-index:40 !important;
+}
+
+.screen-frame.review-open .drawer-head{
+  position:relative !important;
+  height:14px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  padding-right:220px !important;
+}
+
+.screen-frame.review-open .panel-label{
+  font-size:11px !important;
+  letter-spacing:2.6px !important;
+}
+
+.screen-frame.review-open .drawer-back{
+  position:absolute !important;
+  top:-42px !important;
+  right:0 !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+  height:34px !important;
+  min-width:210px !important;
+  padding:0 20px !important;
+  border-radius:8px !important;
+  font-size:11px !important;
+  letter-spacing:2.4px !important;
+  background:#061114 !important;
+  box-shadow:0 0 18px rgba(0,217,255,.14) inset !important;
+}
+
+.screen-frame.review-open .bitstream-viewport{
+  height:48px !important;
+  margin:10px 0 0 !important;
+  overflow:visible !important;
+  -webkit-mask-image:none !important;
+  mask-image:none !important;
+}
+
+.screen-frame.review-open .bitstream-track{
+  width:100% !important;
+  min-height:48px !important;
+  gap:12px !important;
+  justify-content:space-between !important;
+  align-items:flex-start !important;
+  flex-wrap:nowrap !important;
+  animation:none !important;
+  transform:none !important;
+}
+
+.screen-frame.review-open .byte-wrap{
+  flex:0 1 auto !important;
+  min-height:44px !important;
+  padding:8px 8px 6px !important;
+  background:#03080bcc !important;
+  border-radius:10px !important;
+}
+
+.screen-frame.review-open .byte-wrap:not(:last-child){
+  margin-right:0 !important;
+}
+
+.screen-frame.review-open .byte-wrap:not(:last-child):after{
+  right:-17px !important;
+  top:50% !important;
+  width:10px !important;
+  height:2px !important;
+  background:var(--cyan) !important;
+}
+
+.screen-frame.review-open .nybble-wrap{
+  padding:12px 5px 5px !important;
+  min-width:138px !important;
+}
+
+.screen-frame.review-open .nybble-label{
+  display:block !important;
+  top:1px !important;
+  right:7px !important;
+  font-size:9px !important;
+  letter-spacing:1.4px !important;
+}
+
+.screen-frame.review-open .slot,
+.screen-frame.review-open .bit-tile{
+  width:30px !important;
+  height:24px !important;
+  font-size:14px !important;
+}
+
+.review-view{
+  top:154px !important;
+  bottom:20px !important;
+  left:34px !important;
+  right:34px !important;
+}
+
+.review-columns{
+  grid-template-columns:1.08fr .92fr !important;
+  gap:16px !important;
+  align-items:stretch !important;
+}
+
+.review-list-panel,
+.summary-panel{
+  padding:14px 16px !important;
+  border-radius:12px !important;
+  border-color:#12404c !important;
+  box-shadow:0 0 30px #001b24 inset !important;
+}
+
+.review-list-panel h3,
+.summary-panel h3{
+  margin:0 0 10px !important;
+  font-size:12px !important;
+  letter-spacing:2.6px !important;
+}
+
+.review-list{
+  padding-right:8px !important;
+}
+
+.review-row{
+  min-height:58px !important;
+  grid-template-columns:22px 36px 52px 1fr 88px 28px !important;
+  gap:10px !important;
+  border-bottom:1px solid rgba(11,48,57,.85) !important;
+}
+
+.drag-handle{
+  font-size:21px !important;
+  line-height:1 !important;
+}
+
+.thumb{
+  width:52px !important;
+  height:40px !important;
+  object-fit:contain !important;
+}
+
+.row-name{
+  font-size:13px !important;
+  line-height:1.06 !important;
+  color:#eaf8ff !important;
+}
+
+.review-row > div:last-of-type{
+  text-align:right !important;
+  font-size:14px !important;
+  color:#dff4fb !important;
+}
+
+.remove{
+  font-size:22px !important;
+  line-height:1 !important;
+}
+
+.summary-panel{
+  justify-content:flex-start !important;
+}
+
+.summary-grid-wrap{
+  flex:0 0 168px !important;
+  margin:4px 0 12px !important;
+  padding:10px 10px 12px !important;
+  border-radius:22px !important;
+  border-color:#12303b !important;
+  background:
+    radial-gradient(circle at 28% 18%, rgba(5,18,28,.96), rgba(2,7,10,.99) 74%) !important;
+  box-shadow:
+    0 0 18px rgba(0,217,255,.08) inset,
+    inset 0 0 34px rgba(0,0,0,.34) !important;
+}
+
+.summary-grid{
+  width:100% !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:8px !important;
+  align-items:center !important;
+}
+
+.summary-row{
+  width:100% !important;
+  justify-content:center !important;
+  gap:6px !important;
+}
+
+.summary-nibble{
+  gap:6px !important;
+}
+
+.summary-sep{
+  width:12px !important;
+  flex:0 0 12px !important;
+  height:2px !important;
+  align-self:center !important;
+}
+
+.summary-byte-space{
+  width:18px !important;
+  flex:0 0 18px !important;
+}
+
+.summary-cell{
+  width:28px !important;
+  height:28px !important;
+  border-radius:6px !important;
+  font-size:15px !important;
+  border-color:#31444b !important;
+}
+
+.count-line{
+  margin:2px 0 10px !important;
+  font-size:17px !important;
+  line-height:1.04 !important;
+  font-weight:800 !important;
+  color:var(--cyan) !important;
+  letter-spacing:.6px !important;
+}
+
+.count-line span{
+  color:#9ca7ad !important;
+  font-weight:700 !important;
+}
+
+.totals{
+  margin-top:0 !important;
+  padding-top:10px !important;
+  border-top:1px solid #143843 !important;
+}
+
+.totals div{
+  margin:7px 0 !important;
+  font-size:15px !important;
+  color:#c7d5db !important;
+  letter-spacing:1.1px !important;
+}
+
+.totals b{
+  color:#e7f7ff !important;
+  font-size:15px !important;
+}
+
+.total-row{
+  margin-top:10px !important;
+  padding-top:12px !important;
+  border-top:1px solid #143843 !important;
+}
+
+.total-row span{
+  font-size:18px !important;
+  font-weight:800 !important;
+  letter-spacing:1.4px !important;
+}
+
+.total-row b{
+  font-size:28px !important;
+  font-weight:800 !important;
+  color:var(--cyan) !important;
+}
+
+.complete-btn{
+  width:100% !important;
+  height:54px !important;
+  min-height:54px !important;
+  margin-top:14px !important;
+  border-radius:10px !important;
+  font-size:17px !important;
+  letter-spacing:2px !important;
+  background:linear-gradient(180deg,#32c8ff,#11a8e6) !important;
+  box-shadow:0 6px 18px rgba(0,217,255,.14), inset 0 1px 0 rgba(255,255,255,.28) !important;
+}
+
+.complete-btn small{
+  display:block !important;
+  margin-top:1px !important;
+  font-size:8px !important;
+  letter-spacing:2.4px !important;
+}
+
+#summaryBackBtn{
+  width:100% !important;
+  height:40px !important;
+  min-height:40px !important;
+  margin-top:10px !important;
+  border-radius:8px !important;
+  font-size:12px !important;
+  letter-spacing:2.4px !important;
+}
+
+@media (max-height:760px){
+  .screen-frame.review-open .bitstream-drawer{
+    top:48px !important;
+    min-height:78px !important;
+  }
+
+  .screen-frame.review-open .drawer-back{
+    top:-38px !important;
+    height:31px !important;
+  }
+
+  .screen-frame.review-open .bitstream-viewport{
+    height:44px !important;
+    margin-top:8px !important;
+  }
+
+  .screen-frame.review-open .nybble-wrap{
+    min-width:128px !important;
+  }
+
+  .screen-frame.review-open .slot,
+  .screen-frame.review-open .bit-tile{
+    width:27px !important;
+    height:22px !important;
+    font-size:13px !important;
+  }
+
+  .review-view{
+    top:142px !important;
+    bottom:16px !important;
+  }
+
+  .review-columns{
+    gap:14px !important;
+  }
+
+  .summary-grid-wrap{
+    flex-basis:154px !important;
+  }
+
+  .summary-cell{
+    width:25px !important;
+    height:25px !important;
+    font-size:13px !important;
+  }
+
+  .count-line{
+    font-size:16px !important;
+  }
+
+  .total-row b{
+    font-size:25px !important;
+  }
+
+  .complete-btn{
+    height:50px !important;
+    min-height:50px !important;
+    font-size:15px !important;
+  }
+}
+
+
+/* =========================================================
+   Review layout tweak
+   - thinner review-state Bitstream ribbon
+   - review/order summary sit slightly lower
+   - smaller review list rows
+   - full 64-bit summary grid preserved in view
+   ========================================================= */
+
+.screen-frame.review-open .bitstream-drawer{
+  top:62px !important;
+  min-height:70px !important;
+  padding:7px 16px 8px !important;
+  border-radius:14px !important;
+}
+
+.screen-frame.review-open .drawer-head{
+  height:12px !important;
+  padding-right:208px !important;
+}
+
+.screen-frame.review-open .drawer-back{
+  top:-36px !important;
+  height:31px !important;
+  min-width:204px !important;
+  padding:0 18px !important;
+  font-size:10px !important;
+}
+
+.screen-frame.review-open .bitstream-viewport{
+  height:42px !important;
+  margin:8px 0 0 !important;
+}
+
+.screen-frame.review-open .bitstream-track{
+  min-height:42px !important;
+  gap:10px !important;
+}
+
+.screen-frame.review-open .byte-wrap{
+  min-height:38px !important;
+  padding:6px 7px 4px !important;
+}
+
+.screen-frame.review-open .nybble-wrap{
+  min-width:130px !important;
+  padding:11px 4px 4px !important;
+}
+
+.screen-frame.review-open .slot,
+.screen-frame.review-open .bit-tile{
+  width:28px !important;
+  height:22px !important;
+  font-size:13px !important;
+}
+
+.review-view{
+  top:150px !important;
+  bottom:18px !important;
+}
+
+.review-columns{
+  grid-template-columns:1.03fr .97fr !important;
+  gap:14px !important;
+}
+
+.review-list-panel,
+.summary-panel{
+  padding:12px 14px !important;
+}
+
+.review-list-panel h3,
+.summary-panel h3{
+  margin:0 0 8px !important;
+  font-size:11px !important;
+}
+
+.review-row{
+  min-height:52px !important;
+  grid-template-columns:20px 34px 44px 1fr 82px 24px !important;
+  gap:8px !important;
+}
+
+.drag-handle{
+  font-size:19px !important;
+}
+
+.thumb{
+  width:44px !important;
+  height:34px !important;
+}
+
+.row-name{
+  font-size:12.5px !important;
+}
+
+.review-row > div:last-of-type{
+  font-size:13px !important;
+}
+
+.remove{
+  font-size:20px !important;
+}
+
+.summary-grid-wrap{
+  flex:0 0 150px !important;
+  margin:2px 0 10px !important;
+  padding:8px 8px 10px !important;
+}
+
+.summary-grid{
+  gap:6px !important;
+}
+
+.summary-row{
+  gap:5px !important;
+}
+
+.summary-nibble{
+  gap:5px !important;
+}
+
+.summary-cell{
+  width:25px !important;
+  height:25px !important;
+  font-size:13px !important;
+}
+
+.summary-sep{
+  width:10px !important;
+  flex:0 0 10px !important;
+}
+
+.summary-byte-space{
+  width:14px !important;
+  flex:0 0 14px !important;
+}
+
+.count-line{
+  margin:0 0 8px !important;
+  font-size:16px !important;
+}
+
+.totals{
+  padding-top:8px !important;
+}
+
+.totals div{
+  margin:5px 0 !important;
+  font-size:14px !important;
+}
+
+.totals b{
+  font-size:14px !important;
+}
+
+.total-row{
+  margin-top:8px !important;
+  padding-top:10px !important;
+}
+
+.total-row span{
+  font-size:17px !important;
+}
+
+.total-row b{
+  font-size:24px !important;
+}
+
+.complete-btn{
+  margin-top:12px !important;
+  height:50px !important;
+  min-height:50px !important;
+  font-size:16px !important;
+}
+
+#summaryBackBtn{
+  margin-top:9px !important;
+  height:36px !important;
+  min-height:36px !important;
+  font-size:11px !important;
+}
+
+@media (max-height:760px){
+  .screen-frame.review-open .bitstream-drawer{
+    top:56px !important;
+    min-height:66px !important;
+    padding:6px 14px 7px !important;
+  }
+
+  .screen-frame.review-open .drawer-back{
+    top:-34px !important;
+    height:29px !important;
+  }
+
+  .screen-frame.review-open .bitstream-viewport{
+    height:38px !important;
+    margin-top:7px !important;
+  }
+
+  .screen-frame.review-open .nybble-wrap{
+    min-width:122px !important;
+  }
+
+  .screen-frame.review-open .slot,
+  .screen-frame.review-open .bit-tile{
+    width:26px !important;
+    height:21px !important;
+    font-size:12px !important;
+  }
+
+  .review-view{
+    top:142px !important;
+    bottom:14px !important;
+  }
+
+  .review-row{
+    min-height:48px !important;
+    grid-template-columns:18px 32px 40px 1fr 76px 22px !important;
+  }
+
+  .thumb{
+    width:40px !important;
+    height:31px !important;
+  }
+
+  .summary-grid-wrap{
+    flex-basis:140px !important;
+  }
+
+  .summary-cell{
+    width:23px !important;
+    height:23px !important;
+    font-size:12px !important;
+  }
+
+  .count-line{
+    font-size:15px !important;
+  }
+
+  .total-row b{
+    font-size:22px !important;
+  }
+
+  .complete-btn{
+    height:46px !important;
+    min-height:46px !important;
+    font-size:15px !important;
+  }
+}
+
+
+/* =========================================================
+   Review final alignment pass
+   Fixes the remaining issues visible in the review screenshot:
+   - Bitstream ribbon was still too tall and visually sitting over panel headers
+   - Review panels needed a cleaner lower start line
+   - Summary grid needed all 64 cells visible while staying compact
+   - Review list needed slightly tighter rows to preserve scroll space
+   ========================================================= */
+
+/* Force the review Bitstream to be a true thin ribbon, not an auto-height panel. */
+.screen-frame.review-open .bitstream-drawer{
+  top:60px !important;
+  height:74px !important;
+  min-height:74px !important;
+  max-height:74px !important;
+  padding:7px 16px !important;
+  overflow:hidden !important;
+}
+
+.screen-frame.review-open .drawer-head{
+  height:12px !important;
+  min-height:12px !important;
+}
+
+.screen-frame.review-open .panel-label{
+  line-height:12px !important;
+}
+
+.screen-frame.review-open .drawer-back{
+  top:-34px !important;
+  height:30px !important;
+}
+
+/* Tighten the bitstream internals so the ribbon height is controlled. */
+.screen-frame.review-open .bitstream-viewport{
+  height:38px !important;
+  margin:7px 0 0 !important;
+  overflow:visible !important;
+}
+
+.screen-frame.review-open .bitstream-track{
+  min-height:38px !important;
+  height:38px !important;
+  align-items:flex-start !important;
+}
+
+.screen-frame.review-open .byte-wrap{
+  min-height:34px !important;
+  height:34px !important;
+  padding:5px 6px 4px !important;
+}
+
+.screen-frame.review-open .nybble-wrap{
+  min-width:120px !important;
+  padding:10px 4px 3px !important;
+}
+
+.screen-frame.review-open .nybble-label{
+  font-size:8px !important;
+  top:1px !important;
+}
+
+.screen-frame.review-open .slot,
+.screen-frame.review-open .bit-tile{
+  width:26px !important;
+  height:20px !important;
+  font-size:12px !important;
+}
+
+/* Place panels below the ribbon with a real gap. */
+.review-view{
+  top:148px !important;
+  bottom:18px !important;
+}
+
+.review-columns{
+  grid-template-columns:1.04fr .96fr !important;
+  gap:14px !important;
+}
+
+/* Make the panel headings fully clear of the bitstream. */
+.review-list-panel h3,
+.summary-panel h3{
+  margin-top:0 !important;
+  margin-bottom:8px !important;
+  opacity:.95 !important;
+}
+
+/* Slightly tighter Review Order rows so the scrollable area feels intentional. */
+.review-row{
+  min-height:50px !important;
+  grid-template-columns:19px 32px 42px 1fr 78px 22px !important;
+  gap:8px !important;
+}
+
+.review-row .bit-tile{
+  width:30px !important;
+  height:24px !important;
+  font-size:13px !important;
+}
+
+.thumb{
+  width:42px !important;
+  height:32px !important;
+}
+
+.row-name{
+  font-size:12px !important;
+  line-height:1.05 !important;
+}
+
+.review-row > div:last-of-type{
+  font-size:12.5px !important;
+}
+
+/* Preserve all 64 cells in the summary grid and center them cleanly. */
+.summary-grid-wrap{
+  flex:0 0 142px !important;
+  height:142px !important;
+  min-height:142px !important;
+  max-height:142px !important;
+  padding:8px !important;
+  margin:2px 0 10px !important;
+  overflow:hidden !important;
+}
+
+.summary-grid{
+  height:100% !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+  align-items:center !important;
+  gap:5px !important;
+}
+
+.summary-row{
+  width:100% !important;
+  justify-content:center !important;
+  gap:4px !important;
+}
+
+.summary-nibble{
+  gap:4px !important;
+}
+
+.summary-cell{
+  width:23px !important;
+  height:23px !important;
+  min-width:23px !important;
+  min-height:23px !important;
+  font-size:12px !important;
+  border-radius:5px !important;
+}
+
+.summary-sep{
+  width:9px !important;
+  flex:0 0 9px !important;
+}
+
+.summary-byte-space{
+  width:13px !important;
+  flex:0 0 13px !important;
+}
+
+/* Keep the summary hierarchy strong without making the panel overflow. */
+.count-line{
+  font-size:15px !important;
+  margin:0 0 8px !important;
+}
+
+.totals div{
+  font-size:13px !important;
+  margin:5px 0 !important;
+}
+
+.total-row b{
+  font-size:23px !important;
+}
+
+.complete-btn{
+  height:48px !important;
+  min-height:48px !important;
+  margin-top:11px !important;
+}
+
+#summaryBackBtn{
+  height:35px !important;
+  min-height:35px !important;
+  margin-top:8px !important;
+}
+
+/* Short viewport fallback. */
+@media (max-height:760px){
+  .screen-frame.review-open .bitstream-drawer{
+    top:54px !important;
+    height:68px !important;
+    min-height:68px !important;
+    max-height:68px !important;
+    padding:6px 14px !important;
+  }
+
+  .screen-frame.review-open .drawer-back{
+    top:-32px !important;
+    height:28px !important;
+  }
+
+  .screen-frame.review-open .bitstream-viewport{
+    height:34px !important;
+    margin-top:6px !important;
+  }
+
+  .screen-frame.review-open .bitstream-track{
+    min-height:34px !important;
+    height:34px !important;
+  }
+
+  .screen-frame.review-open .byte-wrap{
+    height:31px !important;
+    min-height:31px !important;
+  }
+
+  .screen-frame.review-open .nybble-wrap{
+    min-width:112px !important;
+  }
+
+  .screen-frame.review-open .slot,
+  .screen-frame.review-open .bit-tile{
+    width:24px !important;
+    height:19px !important;
+    font-size:11px !important;
+  }
+
+  .review-view{
+    top:132px !important;
+    bottom:14px !important;
+  }
+
+  .review-row{
+    min-height:46px !important;
+  }
+
+  .summary-grid-wrap{
+    flex-basis:132px !important;
+    height:132px !important;
+    min-height:132px !important;
+    max-height:132px !important;
+  }
+
+  .summary-cell{
+    width:21px !important;
+    height:21px !important;
+    min-width:21px !important;
+    min-height:21px !important;
+    font-size:11px !important;
+  }
+
+  .complete-btn{
+    height:44px !important;
+    min-height:44px !important;
+  }
+}
+
+
+/* =========================================================
+   Top section clean fix
+   Reverts away from the broken oversized ribbon treatment and
+   rebuilds the review-state top section closer to the concept:
+   - visible top-right back button
+   - full-width but shallow bitstream band
+   - centered byte groups with cleaner spacing
+   - cyan completed bytes / amber current byte
+   - subtler decorative end flourishes
+   ========================================================= */
+
+.screen-frame.review-open .bitstream-drawer{
+  top:48px !important;
+  left:24px !important;
+  right:24px !important;
+  width:calc(100% - 48px) !important;
+  height:92px !important;
+  min-height:92px !important;
+  max-height:92px !important;
+  padding:10px 16px 8px !important;
+  border-radius:14px !important;
+  border-color:rgba(0,217,255,.20) !important;
+  background:
+    linear-gradient(180deg, rgba(3,12,17,.84), rgba(2,8,12,.76)),
+    radial-gradient(circle at 18% 22%, rgba(0,217,255,.05), transparent 24%),
+    radial-gradient(circle at 84% 42%, rgba(0,217,255,.04), transparent 18%) !important;
+  box-shadow:
+    inset 0 0 26px rgba(0,0,0,.46),
+    inset 0 1px 0 rgba(255,255,255,.03),
+    0 0 10px rgba(0,217,255,.03) !important;
+  overflow:visible !important;
+}
+
+/* button belongs in the page header zone, not hidden */
+.screen-frame.review-open .drawer-head{
+  position:relative !important;
+  height:16px !important;
+  min-height:16px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  padding-right:238px !important;
+}
+.screen-frame.review-open .drawer-back{
+  position:absolute !important;
+  top:-36px !important;
+  right:4px !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+  height:34px !important;
+  min-width:246px !important;
+  padding:0 20px !important;
+  border-radius:7px !important;
+  font-size:11px !important;
+  letter-spacing:2.4px !important;
+  z-index:12 !important;
+}
+
+/* remove the generic end fade and replace with lighter framing */
+.screen-frame.review-open .bitstream-drawer:after{
+  display:none !important;
+}
+.screen-frame.review-open .bitstream-drawer:before{
+  content:"" !important;
+  position:absolute !important;
+  left:18px !important;
+  right:18px !important;
+  bottom:8px !important;
+  height:1px !important;
+  background:linear-gradient(90deg, rgba(0,217,255,0), rgba(0,217,255,.10) 14%, rgba(0,217,255,.10) 86%, rgba(0,217,255,0)) !important;
+  pointer-events:none !important;
+}
+
+/* header label */
+.screen-frame.review-open .panel-label{
+  line-height:16px !important;
+  font-size:11px !important;
+  letter-spacing:2.8px !important;
+}
+
+/* viewport stays shallow, full width */
+.screen-frame.review-open .bitstream-viewport{
+  position:relative !important;
+  height:52px !important;
+  margin:10px 0 0 !important;
+  overflow:visible !important;
+  -webkit-mask-image:none !important;
+  mask-image:none !important;
+}
+
+/* decorative end flourishes */
+.screen-frame.review-open .bitstream-viewport:before,
+.screen-frame.review-open .bitstream-viewport:after{
+  content:"";
+  position:absolute;
+  top:12px;
+  width:86px;
+  height:28px;
+  opacity:.72;
+  pointer-events:none;
+  background:
+    radial-gradient(circle, rgba(0,217,255,.95) 0 1px, transparent 1.7px) 0 50%/9px 9px repeat-x,
+    radial-gradient(circle, rgba(0,217,255,.65) 0 1px, transparent 1.7px) 0 0/9px 9px repeat-x,
+    radial-gradient(circle, rgba(0,217,255,.65) 0 1px, transparent 1.7px) 0 100%/9px 9px repeat-x;
+  -webkit-mask-image: linear-gradient(45deg, transparent 0 35%, #000 35% 44%, transparent 44% 56%, #000 56% 65%, transparent 65% 100%);
+  mask-image: linear-gradient(45deg, transparent 0 35%, #000 35% 44%, transparent 44% 56%, #000 56% 65%, transparent 65% 100%);
+}
+.screen-frame.review-open .bitstream-viewport:before{ left:6px; }
+.screen-frame.review-open .bitstream-viewport:after{ right:6px; transform:scaleX(-1); }
+
+/* center the byte groups like a header composition, not edge-to-edge */
+.screen-frame.review-open .bitstream-track{
+  width:100% !important;
+  min-height:52px !important;
+  height:52px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:44px !important;
+  padding:0 92px !important;
+  flex-wrap:nowrap !important;
+  animation:none !important;
+  transform:none !important;
+}
+.screen-frame.review-open .loop-clone{ display:none !important; }
+
+/* completed bytes are cyan, current incomplete byte is amber dashed */
+.screen-frame.review-open .byte-wrap{
+  position:relative !important;
+  min-height:45px !important;
+  height:45px !important;
+  padding:7px 7px 5px !important;
+  background:rgba(3,8,11,.86) !important;
+  border-radius:10px !important;
+  box-shadow:0 0 12px rgba(0,217,255,.06) inset !important;
+  overflow:visible !important;
+}
+.screen-frame.review-open .byte-wrap:before{
+  clip-path:none !important;
+  opacity:.92 !important;
+}
+.screen-frame.review-open .byte-wrap.locked:before{
+  border:1px solid rgba(25,167,198,.92) !important;
+  box-shadow:0 0 14px rgba(0,217,255,.12) inset !important;
+}
+.screen-frame.review-open .byte-wrap:not(.locked):before{
+  border:1px dashed rgba(255,159,39,.84) !important;
+  box-shadow:0 0 14px rgba(255,159,39,.10) inset !important;
+}
+
+/* normal connector between earlier bytes */
+.screen-frame.review-open .byte-wrap:not(:last-child):after{
+  content:"" !important;
+  position:absolute !important;
+  right:-28px !important;
+  top:50% !important;
+  width:16px !important;
+  height:2px !important;
+  margin-top:-1px !important;
+  border-radius:2px !important;
+  background:var(--cyan) !important;
+  box-shadow:0 0 6px rgba(0,217,255,.30) !important;
+}
+/* connector before the last/current byte becomes a vertical dotted marker */
+.screen-frame.review-open .byte-wrap:nth-last-child(2):after{
+  right:-32px !important;
+  width:2px !important;
+  height:28px !important;
+  margin-top:-14px !important;
+  background:repeating-linear-gradient(to bottom, rgba(0,217,255,.95) 0 3px, transparent 3px 7px) !important;
+  box-shadow:none !important;
+}
+
+.screen-frame.review-open .byte-body{ gap:7px !important; }
+
+.screen-frame.review-open .nybble-wrap{
+  min-width:150px !important;
+  padding:12px 6px 5px !important;
+  border-radius:8px !important;
+  background:#03080b !important;
+}
+.screen-frame.review-open .nybble-wrap:before{
+  clip-path:none !important;
+  opacity:.90 !important;
+  border-color:#16a7c7 !important;
+  box-shadow:0 0 12px rgba(0,217,255,.11) inset !important;
+}
+.screen-frame.review-open .nybble-wrap.empty-nybble:before{
+  opacity:.38 !important;
+  border-style:dashed !important;
+}
+.screen-frame.review-open .nybble-label{
+  display:block !important;
+  top:-12px !important;
+  right:7px !important;
+  font-size:9px !important;
+  letter-spacing:1.8px !important;
+  color:#bfe8f0 !important;
+  text-shadow:0 0 6px rgba(0,217,255,.12) !important;
+}
+.screen-frame.review-open .nybble-row{ gap:5px !important; }
+
+.screen-frame.review-open .slot,
+.screen-frame.review-open .bit-tile{
+  width:31px !important;
+  height:24px !important;
+  border-radius:6px !important;
+  font-size:15px !important;
+}
+.screen-frame.review-open .slot.empty{
+  opacity:.50 !important;
+}
+
+/* push content below to clear the corrected header strip */
+.review-view{
+  top:152px !important;
+}
+
+/* compact viewport */
+@media (max-height:760px){
+  .screen-frame.review-open .bitstream-drawer{
+    top:42px !important;
+    height:86px !important;
+    min-height:86px !important;
+    max-height:86px !important;
+    padding:9px 14px 7px !important;
+  }
+  .screen-frame.review-open .drawer-back{
+    top:-34px !important;
+    height:31px !important;
+    min-width:228px !important;
+  }
+  .screen-frame.review-open .bitstream-viewport{
+    height:48px !important;
+    margin-top:9px !important;
+  }
+  .screen-frame.review-open .bitstream-track{
+    min-height:48px !important;
+    height:48px !important;
+    gap:34px !important;
+    padding:0 82px !important;
+  }
+  .screen-frame.review-open .byte-wrap{
+    min-height:41px !important;
+    height:41px !important;
+  }
+  .screen-frame.review-open .nybble-wrap{
+    min-width:140px !important;
+    padding-top:11px !important;
+  }
+  .screen-frame.review-open .slot,
+  .screen-frame.review-open .bit-tile{
+    width:29px !important;
+    height:22px !important;
+    font-size:14px !important;
+  }
+  .review-view{
+    top:142px !important;
+  }
+}
+
+
+/* =========================================================
+   Dedicated Review Conveyor Bitstream
+   Review Order / Pay only. Menu bitstream is untouched.
+   ========================================================= */
+
+.screen-frame.review-open .bitstream-drawer{
+  top:64px !important;
+  left:34px !important;
+  right:34px !important;
+  width:calc(100% - 68px) !important;
+  min-height:94px !important;
+  max-height:94px !important;
+  padding:10px 16px 10px !important;
+  overflow:hidden !important;
+  border-radius:15px !important;
+  border:1px solid rgba(0,217,255,.18) !important;
+  background:
+    linear-gradient(180deg, rgba(4,13,18,.90), rgba(2,8,12,.78)),
+    radial-gradient(circle at 12% 24%, rgba(0,217,255,.055), transparent 25%),
+    radial-gradient(circle at 88% 35%, rgba(0,217,255,.035), transparent 20%) !important;
+  box-shadow:
+    inset 0 0 24px rgba(0,0,0,.44),
+    inset 0 1px 0 rgba(255,255,255,.03),
+    0 0 10px rgba(0,217,255,.04) !important;
+  z-index:40 !important;
+}
+
+.screen-frame.review-open .drawer-head{
+  height:14px !important;
+  min-height:14px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  padding-right:260px !important;
+}
+
+.screen-frame.review-open .panel-label{
+  font-size:11px !important;
+  line-height:14px !important;
+  letter-spacing:3px !important;
+  opacity:.96 !important;
+}
+
+.screen-frame.review-open .drawer-back{
+  position:absolute !important;
+  top:-44px !important;
+  right:6px !important;
+  min-width:246px !important;
+  height:34px !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+  z-index:24 !important;
+}
+
+.screen-frame.review-open .review-btn,
+.screen-frame.review-open .insert-gate{
+  opacity:0 !important;
+  pointer-events:none !important;
+}
+
+.screen-frame.review-open .bitstream-drawer:after{
+  display:none !important;
+}
+
+.screen-frame.review-open .bitstream-drawer:before{
+  content:"" !important;
+  position:absolute !important;
+  left:18px !important;
+  right:18px !important;
+  bottom:8px !important;
+  height:1px !important;
+  background:linear-gradient(90deg, rgba(0,217,255,0), rgba(0,217,255,.08) 14%, rgba(0,217,255,.08) 86%, rgba(0,217,255,0)) !important;
+  pointer-events:none !important;
+}
+
+.screen-frame.review-open .bitstream-viewport.review-conveyor-viewport{
+  position:relative !important;
+  height:54px !important;
+  margin:9px 0 0 !important;
+  overflow:hidden !important;
+  border-radius:12px !important;
+  background:
+    linear-gradient(180deg, rgba(0,217,255,.025), rgba(0,0,0,0) 32%, rgba(0,217,255,.02)),
+    linear-gradient(90deg, rgba(0,217,255,.035), rgba(0,217,255,0) 12%, rgba(0,217,255,0) 88%, rgba(0,217,255,.035)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.025),
+    inset 0 -1px 0 rgba(0,217,255,.055) !important;
+  -webkit-mask-image:linear-gradient(90deg, transparent 0%, #000 5.5%, #000 94.5%, transparent 100%) !important;
+  mask-image:linear-gradient(90deg, transparent 0%, #000 5.5%, #000 94.5%, transparent 100%) !important;
+}
+
+/* Remove old nybble/byte rules from the review conveyor */
+.screen-frame.review-open .review-conveyor-track .byte-wrap,
+.screen-frame.review-open .review-conveyor-track .nybble-wrap,
+.screen-frame.review-open .review-conveyor-track .bit-tile,
+.screen-frame.review-open .review-conveyor-track .slot{
+  all:unset;
+}
+
+/* Dedicated conveyor motion */
+.screen-frame.review-open .review-conveyor-track{
+  position:relative !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:32px !important;
+  width:max-content !important;
+  min-height:54px !important;
+  height:54px !important;
+  will-change:transform !important;
+}
+
+.screen-frame.review-open .review-conveyor-track.running{
+  animation:reviewConveyorMotion 44s linear infinite !important;
+}
+
+@keyframes reviewConveyorMotion{
+  from{ transform:translate3d(0,0,0); }
+  to{ transform:translate3d(calc(var(--review-conveyor-distance, 560px) * -1),0,0); }
+}
+
+.screen-frame.review-open .review-conveyor-copy{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  flex:0 0 auto;
+  padding:0 4px;
+}
+
+.screen-frame.review-open .review-conveyor-copy.clone .review-conveyor-label{
+  opacity:0;
+}
+
+/* Decorative but restrained ends */
+.screen-frame.review-open .review-conveyor-flourish{
+  width:62px;
+  height:26px;
+  flex:0 0 62px;
+  opacity:.46;
+  position:relative;
+}
+
+.screen-frame.review-open .review-conveyor-flourish:before,
+.screen-frame.review-open .review-conveyor-flourish:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle, rgba(0,217,255,.82) 0 1px, transparent 1.7px) 0 50%/8px 8px repeat-x,
+    radial-gradient(circle, rgba(0,217,255,.52) 0 1px, transparent 1.7px) 0 0/8px 8px repeat-x,
+    radial-gradient(circle, rgba(0,217,255,.52) 0 1px, transparent 1.7px) 0 100%/8px 8px repeat-x;
+  -webkit-mask-image:linear-gradient(45deg, transparent 0 36%, #000 36% 44%, transparent 44% 56%, #000 56% 64%, transparent 64% 100%);
+  mask-image:linear-gradient(45deg, transparent 0 36%, #000 36% 44%, transparent 44% 56%, #000 56% 64%, transparent 64% 100%);
+}
+
+.screen-frame.review-open .review-conveyor-flourish.right{
+  transform:scaleX(-1);
+}
+
+/* Capsules */
+.screen-frame.review-open .review-conveyor-nybble{
+  position:relative;
+  flex:0 0 auto;
+  padding:13px 7px 5px;
+  border-radius:10px;
+  background:rgba(3,8,11,.82);
+  border:1px solid rgba(16,165,204,.46);
+  box-shadow:
+    inset 0 0 10px rgba(0,217,255,.045),
+    0 0 0 1px rgba(255,255,255,.008);
+}
+
+.screen-frame.review-open .review-conveyor-nybble.locked{
+  border-color:rgba(18,186,226,.68);
+}
+
+.screen-frame.review-open .review-conveyor-nybble.current{
+  border-color:rgba(255,168,52,.76);
+  border-style:dashed;
+  box-shadow:inset 0 0 12px rgba(255,168,52,.055);
+}
+
+.screen-frame.review-open .review-conveyor-nybble.empty{
+  border-color:rgba(16,165,204,.24);
+  border-style:dashed;
+  opacity:.82;
+}
+
+.screen-frame.review-open .review-conveyor-label{
+  position:absolute;
+  left:50%;
+  top:2px;
+  transform:translateX(-50%);
+  color:rgba(204,236,242,.92);
+  font-size:8px;
+  line-height:9px;
+  letter-spacing:1.55px;
+  white-space:nowrap;
+  text-transform:uppercase;
+  pointer-events:none;
+}
+
+.screen-frame.review-open .review-conveyor-nybble.current .review-conveyor-label{
+  color:rgba(255,192,99,.95);
+}
+
+.screen-frame.review-open .review-conveyor-row{
+  display:flex;
+  gap:5px;
+  align-items:center;
+}
+
+.screen-frame.review-open .review-conveyor-bit{
+  width:29px;
+  height:22px;
+  border-radius:6px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:15px;
+  line-height:1;
+  font-weight:800;
+  letter-spacing:.4px;
+  background:rgba(3,10,15,.92);
+  border:1px solid rgba(18,190,228,.70);
+  color:#08d9ff;
+  box-shadow:inset 0 0 8px rgba(0,217,255,.06);
+}
+
+.screen-frame.review-open .review-conveyor-bit.amber{
+  color:#ffab38;
+  border-color:rgba(255,168,52,.70);
+  box-shadow:inset 0 0 8px rgba(255,168,52,.06);
+}
+
+.screen-frame.review-open .review-conveyor-bit.empty{
+  color:transparent;
+  border-style:dashed;
+  border-color:rgba(120,157,166,.32);
+  background:rgba(2,6,9,.64);
+  box-shadow:none;
+}
+
+.screen-frame.review-open .review-conveyor-divider{
+  width:10px;
+  height:2px;
+  border-radius:2px;
+  flex:0 0 10px;
+  background:rgba(0,217,255,.72);
+  box-shadow:0 0 5px rgba(0,217,255,.16);
+}
+
+.screen-frame.review-open .review-conveyor-divider.active{
+  width:1px;
+  height:28px;
+  flex-basis:1px;
+  background:repeating-linear-gradient(to bottom, rgba(0,217,255,.85) 0 3px, transparent 3px 7px);
+  box-shadow:none;
+  opacity:.85;
+}
+
+/* Give the review panels proper clearance under the conveyor */
+.review-view{
+  top:172px !important;
+}
+
+/* shorter browser windows */
+@media (max-height:760px){
+  .screen-frame.review-open .bitstream-drawer{
+    top:56px !important;
+    min-height:88px !important;
+    max-height:88px !important;
+    padding:9px 14px 8px !important;
+  }
+
+  .screen-frame.review-open .drawer-back{
+    top:-40px !important;
+    min-width:228px !important;
+    height:31px !important;
+  }
+
+  .screen-frame.review-open .bitstream-viewport.review-conveyor-viewport{
+    height:50px !important;
+    margin-top:8px !important;
+  }
+
+  .screen-frame.review-open .review-conveyor-track{
+    min-height:50px !important;
+    height:50px !important;
+  }
+
+  .screen-frame.review-open .review-conveyor-bit{
+    width:27px;
+    height:21px;
+    font-size:14px;
+  }
+
+  .screen-frame.review-open .review-conveyor-nybble{
+    padding:12px 6px 5px;
+  }
+
+  .review-view{
+    top:160px !important;
+  }
+}
+
+
+/* =========================================================
+   Review conveyor actual-motion override
+   The review/pay conveyor is moved by requestAnimationFrame in JS.
+   This avoids the prior CSS animation being cancelled by inherited rules.
+   ========================================================= */
+
+.screen-frame.review-open .review-conveyor-track.running{
+  animation:none !important;
+}
+
+.screen-frame.review-open .review-conveyor-track{
+  transform:translate3d(0,0,0);
+}
+
+/* Slightly faster-looking spacing so movement is obvious but not frantic. */
+.screen-frame.review-open .review-conveyor-copy{
+  gap:14px !important;
+}
+
+.screen-frame.review-open .review-conveyor-track{
+  gap:32px !important;
+}
+
+
+/* =========================================================
+   Review conveyor motion hard fix
+   Older review rules used transform:none!important on .bitstream-track.
+   The JS now writes an inline !important transform, and this selector
+   ensures no normal rule suppresses the review conveyor.
+   ========================================================= */
+
+.screen-frame.review-open .bitstream-track.review-conveyor-track{
+  transform:translate3d(0,0,0) !important;
+  animation:none !important;
+  will-change:transform !important;
+}
+
+
+/* =========================================================
+   Review conveyor nibble-count correction
+   - Primary conveyor copy now renders only the exact number of
+     nybble containers required by the cart.
+   - Example: 16 bits = 4 nybble containers.
+   - The duplicated copy remains only for conveyor looping.
+   - Loop gap is reduced so it wraps sooner.
+   - NYBBLE labels are right-aligned inside each capsule.
+   ========================================================= */
+
+.screen-frame.review-open .review-conveyor-track{
+  gap:12px !important;
+}
+
+.screen-frame.review-open .review-conveyor-copy{
+  gap:12px !important;
+}
+
+.screen-frame.review-open .review-conveyor-copy.clone{
+  margin-left:0 !important;
+}
+
+.screen-frame.review-open .review-conveyor-label{
+  left:auto !important;
+  right:7px !important;
+  transform:none !important;
+  text-align:right !important;
+}
+
+.screen-frame.review-open .review-conveyor-nybble{
+  min-width:118px;
+}
+
+.screen-frame.review-open .review-conveyor-flourish{
+  width:44px !important;
+  flex-basis:44px !important;
+  opacity:.38 !important;
+}
+
+.screen-frame.review-open .review-conveyor-divider{
+  width:9px !important;
+  flex-basis:9px !important;
+}
+
+.screen-frame.review-open .review-conveyor-divider.active{
+  width:1px !important;
+  flex-basis:1px !important;
+}
+
+@media (max-height:760px){
+  .screen-frame.review-open .review-conveyor-track,
+  .screen-frame.review-open .review-conveyor-copy{
+    gap:10px !important;
+  }
+
+  .screen-frame.review-open .review-conveyor-nybble{
+    min-width:110px;
+  }
+}
+
+
+/* =========================================================
+   Review conveyor label visibility fix
+   The duplicated wraparound copy previously hid labels, which made
+   NYBBLE labels disappear during the loop. Labels now remain visible
+   on both the primary and cloned conveyor copies.
+   ========================================================= */
+
+.screen-frame.review-open .review-conveyor-copy.clone .review-conveyor-label,
+.screen-frame.review-open .loop-clone .review-conveyor-label{
+  opacity:.96 !important;
+  visibility:visible !important;
+}
+
+.screen-frame.review-open .review-conveyor-label{
+  left:auto !important;
+  right:7px !important;
+  transform:none !important;
+  text-align:right !important;
+  opacity:.96 !important;
+  visibility:visible !important;
+  z-index:5 !important;
+  pointer-events:none !important;
+}
+
+.screen-frame.review-open .review-conveyor-nybble{
+  overflow:visible !important;
+}
+
+.screen-frame.review-open .review-conveyor-row{
+  position:relative !important;
+  z-index:2 !important;
+}
+
+
+/* =========================================================
+   Review conveyor size / alignment fix
+   Makes the Review Order / Pay Bitstream ribbon a little wider
+   and a little shorter, aligned with the Review Order and
+   Order Summary panel edges without overlapping them.
+   ========================================================= */
+
+.screen-frame.review-open .bitstream-drawer{
+  left:34px !important;
+  right:34px !important;
+  width:calc(100% - 68px) !important;
+  top:60px !important;
+  min-height:82px !important;
+  max-height:82px !important;
+  padding:9px 16px 8px !important;
+  border-radius:14px !important;
+  overflow:hidden !important;
+}
+
+.screen-frame.review-open .drawer-head{
+  height:13px !important;
+  min-height:13px !important;
+}
+
+.screen-frame.review-open .bitstream-viewport.review-conveyor-viewport{
+  height:46px !important;
+  margin-top:7px !important;
+}
+
+.screen-frame.review-open .review-conveyor-track{
+  min-height:46px !important;
+  height:46px !important;
+}
+
+.screen-frame.review-open .review-conveyor-nybble{
+  padding:11px 7px 5px !important;
+}
+
+.screen-frame.review-open .review-conveyor-bit{
+  width:28px !important;
+  height:21px !important;
+  font-size:14px !important;
+}
+
+.screen-frame.review-open .review-conveyor-label{
+  top:1px !important;
+  right:7px !important;
+}
+
+.screen-frame.review-open .review-conveyor-flourish{
+  height:22px !important;
+}
+
+/* Give the panels a clean gap below the shorter ribbon. */
+.review-view{
+  top:156px !important;
+}
+
+/* Smaller height fallback */
+@media (max-height:760px){
+  .screen-frame.review-open .bitstream-drawer{
+    top:54px !important;
+    min-height:76px !important;
+    max-height:76px !important;
+    padding:8px 14px 7px !important;
+  }
+
+  .screen-frame.review-open .bitstream-viewport.review-conveyor-viewport{
+    height:42px !important;
+    margin-top:6px !important;
+  }
+
+  .screen-frame.review-open .review-conveyor-track{
+    min-height:42px !important;
+    height:42px !important;
+  }
+
+  .screen-frame.review-open .review-conveyor-bit{
+    width:26px !important;
+    height:20px !important;
+    font-size:13px !important;
+  }
+
+  .review-view{
+    top:146px !important;
+  }
+}
+
+
+/* =========================================================
+   Review conveyor full-width alignment fix
+   Fills the full available review width by aligning the Bitstream
+   ribbon with the Review Order / Order Summary panel edges.
+   ========================================================= */
+
+.screen-frame.review-open .bitstream-drawer{
+  left:0 !important;
+  right:0 !important;
+  width:100% !important;
+  top:60px !important;
+  min-height:82px !important;
+  max-height:82px !important;
+  padding:9px 18px 8px !important;
+  border-radius:14px !important;
+  overflow:hidden !important;
+}
+
+/* Keep the moving content away from the rounded corners while letting the frame fill the width. */
+.screen-frame.review-open .bitstream-viewport.review-conveyor-viewport{
+  height:46px !important;
+  margin-top:7px !important;
+  margin-left:6px !important;
+  margin-right:6px !important;
+}
+
+/* Panels now sit directly below the full-width Bitstream without overlap. */
+.review-view{
+  left:0 !important;
+  right:0 !important;
+  top:156px !important;
+}
+
+/* Keep the internal panel gap unchanged. */
+.review-columns{
+  gap:14px !important;
+}
+
+@media (max-height:760px){
+  .screen-frame.review-open .bitstream-drawer{
+    left:0 !important;
+    right:0 !important;
+    width:100% !important;
+    top:54px !important;
+    min-height:76px !important;
+    max-height:76px !important;
+    padding:8px 16px 7px !important;
+  }
+
+  .screen-frame.review-open .bitstream-viewport.review-conveyor-viewport{
+    height:42px !important;
+    margin-top:6px !important;
+  }
+
+  .review-view{
+    left:0 !important;
+    right:0 !important;
+    top:146px !important;
+  }
+}
+
+
+/* =========================================================
+   Review panel containment fix
+   The previous full-width Bitstream pass accidentally expanded the
+   Review Order / Order Summary panel container to the screen edge.
+   This restores the panels to the intended inset and pushes them
+   below the Bitstream so nothing overlaps.
+   ========================================================= */
+
+.screen-frame.review-open .review-view,
+.review-view{
+  left:34px !important;
+  right:34px !important;
+  top:174px !important;
+  bottom:28px !important;
+}
+
+.screen-frame.review-open .review-columns,
+.review-columns{
+  width:100% !important;
+  height:100% !important;
+  gap:14px !important;
+  grid-template-columns:1.18fr .82fr !important;
+}
+
+.screen-frame.review-open .review-list-panel,
+.screen-frame.review-open .summary-panel,
+.review-list-panel,
+.summary-panel{
+  width:100% !important;
+  height:100% !important;
+  min-width:0 !important;
+  box-sizing:border-box !important;
+  overflow:hidden !important;
+}
+
+/* Keep the Bitstream full-width within the same visual inset, without touching the panels. */
+.screen-frame.review-open .bitstream-drawer{
+  left:34px !important;
+  right:34px !important;
+  width:calc(100% - 68px) !important;
+  top:60px !important;
+  min-height:82px !important;
+  max-height:82px !important;
+}
+
+/* Clear vertical air between the Bitstream border and the panel borders. */
+.screen-frame.review-open .bitstream-viewport.review-conveyor-viewport{
+  height:46px !important;
+  margin-top:7px !important;
+}
+
+@media (max-height:760px){
+  .screen-frame.review-open .review-view,
+  .review-view{
+    left:34px !important;
+    right:34px !important;
+    top:160px !important;
+    bottom:24px !important;
+  }
+
+  .screen-frame.review-open .bitstream-drawer{
+    left:34px !important;
+    right:34px !important;
+    width:calc(100% - 68px) !important;
+    top:54px !important;
+    min-height:76px !important;
+    max-height:76px !important;
+  }
+}
+
+
+/* =========================================================
+   Review body scale / density pass
+   - Order Summary uses more of its available vertical space.
+   - Review Order item text is slightly larger and clearer.
+   - Keeps the corrected panel containment from the prior pass.
+   ========================================================= */
+
+/* Review list readability */
+.screen-frame.review-open .review-row,
+.review-row{
+  min-height:56px !important;
+  grid-template-columns:22px 40px 54px 1fr 76px 26px !important;
+  gap:11px !important;
+}
+
+.screen-frame.review-open .review-row .bit-tile,
+.review-row .bit-tile{
+  width:36px !important;
+  height:29px !important;
+  font-size:16px !important;
+  border-radius:7px !important;
+}
+
+.screen-frame.review-open .review-row .thumb,
+.review-row .thumb{
+  width:54px !important;
+  height:42px !important;
+  object-fit:cover !important;
+}
+
+.screen-frame.review-open .row-name,
+.row-name{
+  font-size:14px !important;
+  line-height:18px !important;
+  letter-spacing:.05px !important;
+}
+
+.screen-frame.review-open .review-row > div:nth-child(5),
+.review-row > div:nth-child(5){
+  font-size:14px !important;
+}
+
+/* Order summary vertical scaling */
+.screen-frame.review-open .summary-panel,
+.summary-panel{
+  padding:15px 18px 18px !important;
+}
+
+.screen-frame.review-open .summary-panel h3,
+.summary-panel h3{
+  margin-bottom:14px !important;
+  font-size:12px !important;
+  letter-spacing:2.7px !important;
+}
+
+.screen-frame.review-open .summary-grid-wrap,
+.summary-grid-wrap{
+  flex:0 0 188px !important;
+  height:188px !important;
+  padding:18px 22px !important;
+  margin:0 0 14px !important;
+  border-radius:22px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+
+.screen-frame.review-open .summary-grid,
+.summary-grid{
+  transform:scale(1.12) !important;
+  transform-origin:center center !important;
+}
+
+.screen-frame.review-open .summary-cell,
+.summary-cell{
+  width:29px !important;
+  height:29px !important;
+  border-radius:7px !important;
+  font-size:15px !important;
+}
+
+.screen-frame.review-open .summary-row,
+.summary-row{
+  gap:7px !important;
+}
+
+.screen-frame.review-open .summary-nibble,
+.summary-nibble{
+  gap:5px !important;
+}
+
+.screen-frame.review-open .summary-sep{
+  width:11px !important;
+}
+
+.screen-frame.review-open .summary-byte-space{
+  width:28px !important;
+}
+
+/* Let the lower summary block occupy the remaining vertical real estate. */
+.screen-frame.review-open .count-line,
+.count-line{
+  font-size:16px !important;
+  line-height:22px !important;
+  margin:4px 0 10px !important;
+  padding-bottom:10px !important;
+}
+
+.screen-frame.review-open .totals,
+.totals{
+  gap:8px !important;
+  margin-bottom:18px !important;
+}
+
+.screen-frame.review-open .totals div,
+.totals div{
+  font-size:16px !important;
+  line-height:24px !important;
+}
+
+.screen-frame.review-open .total-row,
+.total-row{
+  margin-top:8px !important;
+  padding-top:12px !important;
+}
+
+.screen-frame.review-open .total-row span,
+.total-row span{
+  font-size:21px !important;
+  letter-spacing:2.4px !important;
+}
+
+.screen-frame.review-open #total,
+#total{
+  font-size:28px !important;
+}
+
+.screen-frame.review-open .complete-btn,
+.complete-btn{
+  height:64px !important;
+  min-height:64px !important;
+  font-size:20px !important;
+  letter-spacing:2.8px !important;
+  margin-top:2px !important;
+}
+
+.screen-frame.review-open .complete-btn small,
+.complete-btn small{
+  font-size:9px !important;
+  letter-spacing:3px !important;
+  margin-top:4px !important;
+}
+
+.screen-frame.review-open #summaryBackBtn,
+#summaryBackBtn{
+  height:44px !important;
+  min-height:44px !important;
+  font-size:13px !important;
+  letter-spacing:2.8px !important;
+  margin-top:10px !important;
+}
+
+/* If the viewport is short, scale back gently so it still fits. */
+@media (max-height:760px){
+  .screen-frame.review-open .review-row,
+  .review-row{
+    min-height:52px !important;
+  }
+
+  .screen-frame.review-open .row-name,
+  .row-name{
+    font-size:13px !important;
+    line-height:17px !important;
+  }
+
+  .screen-frame.review-open .summary-grid-wrap,
+  .summary-grid-wrap{
+    flex-basis:168px !important;
+    height:168px !important;
+    padding:14px 18px !important;
+    margin-bottom:10px !important;
+  }
+
+  .screen-frame.review-open .summary-grid,
+  .summary-grid{
+    transform:scale(1.02) !important;
+  }
+
+  .screen-frame.review-open .summary-cell,
+  .summary-cell{
+    width:27px !important;
+    height:27px !important;
+    font-size:14px !important;
+  }
+
+  .screen-frame.review-open .count-line,
+  .count-line{
+    font-size:15px !important;
+    margin-bottom:8px !important;
+    padding-bottom:8px !important;
+  }
+
+  .screen-frame.review-open .totals,
+  .totals{
+    gap:6px !important;
+    margin-bottom:12px !important;
+  }
+
+  .screen-frame.review-open .complete-btn,
+  .complete-btn{
+    height:58px !important;
+    min-height:58px !important;
+    font-size:18px !important;
+  }
+
+  .screen-frame.review-open #summaryBackBtn,
+  #summaryBackBtn{
+    height:40px !important;
+    min-height:40px !important;
+    margin-top:8px !important;
+  }
+}
+
+
+/* =========================================================
+   Order Summary 64-bit grid readability fix
+   Everything else in the Order Summary stays scaled up.
+   This corrects only the 64-bit matrix so all 64 positions are
+   readable as 4 rows x 16 bits, grouped into Nybbles and Bytes.
+   ========================================================= */
+
+.screen-frame.review-open .summary-grid-wrap,
+.summary-grid-wrap{
+  flex:0 0 178px !important;
+  height:178px !important;
+  width:100% !important;
+  max-width:none !important;
+  box-sizing:border-box !important;
+  padding:15px 18px !important;
+  margin:0 0 14px !important;
+  overflow:hidden !important;
+  border-radius:22px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+
+.screen-frame.review-open .summary-grid,
+.summary-grid{
+  width:auto !important;
+  max-width:100% !important;
+  transform:none !important;
+  transform-origin:center center !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:8px !important;
+}
+
+.screen-frame.review-open .summary-row,
+.summary-row{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:6px !important;
+  width:auto !important;
+  min-width:0 !important;
+}
+
+.screen-frame.review-open .summary-nibble,
+.summary-nibble{
+  display:grid !important;
+  grid-template-columns:repeat(4, 25px) !important;
+  gap:4px !important;
+  flex:0 0 auto !important;
+}
+
+.screen-frame.review-open .summary-cell,
+.summary-cell{
+  width:25px !important;
+  height:25px !important;
+  box-sizing:border-box !important;
+  border-radius:6px !important;
+  font-size:13px !important;
+  line-height:1 !important;
+  display:grid !important;
+  place-items:center !important;
+}
+
+.screen-frame.review-open .summary-sep,
+.summary-sep{
+  width:10px !important;
+  min-width:10px !important;
+  height:2px !important;
+  flex:0 0 10px !important;
+  margin:0 1px !important;
+  opacity:.72 !important;
+}
+
+.screen-frame.review-open .summary-byte-space,
+.summary-byte-space{
+  width:22px !important;
+  min-width:22px !important;
+  flex:0 0 22px !important;
+}
+
+/* Shorter viewport fallback keeps all 64 slots legible without cropping. */
+@media (max-height:760px){
+  .screen-frame.review-open .summary-grid-wrap,
+  .summary-grid-wrap{
+    flex-basis:166px !important;
+    height:166px !important;
+    padding:12px 14px !important;
+    margin-bottom:10px !important;
+  }
+
+  .screen-frame.review-open .summary-grid,
+  .summary-grid{
+    gap:7px !important;
+  }
+
+  .screen-frame.review-open .summary-row,
+  .summary-row{
+    gap:5px !important;
+  }
+
+  .screen-frame.review-open .summary-nibble,
+  .summary-nibble{
+    grid-template-columns:repeat(4, 23px) !important;
+    gap:4px !important;
+  }
+
+  .screen-frame.review-open .summary-cell,
+  .summary-cell{
+    width:23px !important;
+    height:23px !important;
+    font-size:12px !important;
+    border-radius:6px !important;
+  }
+
+  .screen-frame.review-open .summary-sep,
+  .summary-sep{
+    width:8px !important;
+    min-width:8px !important;
+    flex-basis:8px !important;
+  }
+
+  .screen-frame.review-open .summary-byte-space,
+  .summary-byte-space{
+    width:18px !important;
+    min-width:18px !important;
+    flex-basis:18px !important;
+  }
+}
+
+
+/* =========================================================
+   Final Order Summary 64-bit grid visibility fix
+   Purpose: ensure all 64 cells stay fully visible inside the panel.
+   This trims only the grid dimensions and spacing so nothing is clipped
+   off the left/right edges while preserving the 4-row x 16-bit layout.
+   ========================================================= */
+.screen-frame.review-open .summary-grid-wrap,
+.summary-grid-wrap{
+  overflow:hidden !important;
+  padding:14px 16px !important;
+}
+
+.screen-frame.review-open .summary-grid,
+.summary-grid{
+  width:max-content !important;
+  max-width:100% !important;
+  margin:0 auto !important;
+  gap:7px !important;
+}
+
+.screen-frame.review-open .summary-row,
+.summary-row{
+  width:max-content !important;
+  max-width:100% !important;
+  gap:4px !important;
+  justify-content:center !important;
+}
+
+.screen-frame.review-open .summary-nibble,
+.summary-nibble{
+  grid-template-columns:repeat(4, 20px) !important;
+  gap:3px !important;
+}
+
+.screen-frame.review-open .summary-cell,
+.summary-cell{
+  width:20px !important;
+  height:20px !important;
+  font-size:11px !important;
+  border-radius:5px !important;
+}
+
+.screen-frame.review-open .summary-sep,
+.summary-sep{
+  width:8px !important;
+  min-width:8px !important;
+  flex:0 0 8px !important;
+  margin:0 2px !important;
+}
+
+.screen-frame.review-open .summary-byte-space,
+.summary-byte-space{
+  width:14px !important;
+  min-width:14px !important;
+  flex:0 0 14px !important;
+}
+
+@media (max-height:760px){
+  .screen-frame.review-open .summary-grid-wrap,
+  .summary-grid-wrap{
+    padding:12px 14px !important;
+  }
+  .screen-frame.review-open .summary-grid,
+  .summary-grid{gap:6px !important;}
+  .screen-frame.review-open .summary-row,
+  .summary-row{gap:3px !important;}
+  .screen-frame.review-open .summary-nibble,
+  .summary-nibble{grid-template-columns:repeat(4, 18px) !important; gap:3px !important;}
+  .screen-frame.review-open .summary-cell,
+  .summary-cell{width:18px !important; height:18px !important; font-size:10px !important; border-radius:5px !important;}
+  .screen-frame.review-open .summary-sep,
+  .summary-sep{width:7px !important; min-width:7px !important; flex-basis:7px !important;}
+  .screen-frame.review-open .summary-byte-space,
+  .summary-byte-space{width:12px !important; min-width:12px !important; flex-basis:12px !important;}
+}
+
+
+/* =========================================================
+   Menu bitstream conveyor motion fix
+   Restores seamless motion in Payload/Kicker menu bitstreams
+   without affecting the dedicated Review/Pay conveyor.
+   ========================================================= */
+.menu-conveyor-copy{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex:0 0 auto;
+}
+
+
+/* =========================================================
+   Menu conveyor gap + review top-right back button
+   ========================================================= */
+.menu-conveyor-gap{
+  flex:0 0 auto;
+  width:0;
+  height:1px;
+  pointer-events:none;
+}
+
+.review-view{
+  position:absolute;
+}
+
+.review-top-back{
+  position:absolute;
+  top:-144px;
+  right:0;
+  z-index:18;
+  height:34px;
+  min-width:176px;
+  padding:0 18px;
+  border:1px solid #0b5b69;
+  border-radius:8px;
+  background:linear-gradient(180deg,rgba(7,22,28,.96),rgba(3,11,15,.96));
+  color:var(--cyan);
+  font-weight:900;
+  font-size:12px;
+  letter-spacing:2.2px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  box-shadow:0 0 18px rgba(0,217,255,.10) inset,0 0 10px rgba(0,0,0,.35);
+}
+.review-top-back span{
+  font-size:14px;
+  line-height:1;
+}
+@media (max-height:760px){
+  .review-top-back{ top:-40px; height:32px; min-width:164px; font-size:11px; }
+}
+
+
+/* =========================================================
+   Kinetic UI pass
+   Adds subtle touchscreen-friendly movement across all menus:
+   button/card press feedback, panel transitions, review row arrivals,
+   summary update pulses, and Bitstream signal reactions.
+   ========================================================= */
+
+:root{
+  --kinetic-ease:cubic-bezier(.18,.86,.2,1);
+  --kinetic-ease-out:cubic-bezier(.16,1,.24,1);
+}
+
+/* Global interactive affordance */
+button,
+.item-card,
+.review-row,
+.age-btn,
+.mode-tab,
+.complete-btn,
+.back-btn,
+.drawer-back,
+.review-top-back{
+  transition:
+    transform .16s var(--kinetic-ease),
+    filter .18s ease,
+    box-shadow .22s ease,
+    border-color .22s ease,
+    background .22s ease;
+}
+
+.ui-press-target{
+  position:relative;
+  overflow:hidden;
+}
+
+.ui-pressing{
+  transform:translateY(1px) scale(.986) !important;
+  filter:brightness(1.16) saturate(1.08);
+}
+
+.ui-released{
+  animation:uiReleasePop .28s var(--kinetic-ease-out);
+}
+
+@keyframes uiReleasePop{
+  0%{transform:translateY(1px) scale(.986)}
+  58%{transform:translateY(-1px) scale(1.012)}
+  100%{transform:translateY(0) scale(1)}
+}
+
+.press-ripple{
+  position:absolute;
+  width:14px;
+  height:14px;
+  left:0;
+  top:0;
+  border-radius:50%;
+  pointer-events:none;
+  transform:translate(-50%,-50%) scale(.2);
+  background:radial-gradient(circle, rgba(0,217,255,.36), rgba(0,217,255,.16) 38%, transparent 70%);
+  mix-blend-mode:screen;
+  animation:pressRipple .56s ease-out forwards;
+  z-index:20;
+}
+
+.item-card.kicker .press-ripple{
+  background:radial-gradient(circle, rgba(255,159,39,.34), rgba(255,159,39,.14) 38%, transparent 70%);
+}
+
+@keyframes pressRipple{
+  0%{opacity:.9; transform:translate(-50%,-50%) scale(.2)}
+  100%{opacity:0; transform:translate(-50%,-50%) scale(13)}
+}
+
+/* Navigation / mode switching */
+.screen-frame.menu-switching .category-mount{
+  animation:menuContentSwap .42s var(--kinetic-ease-out);
+}
+
+.screen-frame.menu-switching .navrow{
+  animation:navSignal .42s ease-out;
+}
+
+.mode-tab.active,
+.age-btn.active{
+  animation:activeTabPulse .44s ease-out;
+}
+
+@keyframes menuContentSwap{
+  0%{opacity:.25; transform:translateY(10px) scale(.992); filter:blur(2px)}
+  62%{opacity:1; transform:translateY(-1px) scale(1.003); filter:blur(0)}
+  100%{opacity:1; transform:translateY(0) scale(1)}
+}
+
+@keyframes navSignal{
+  0%{filter:brightness(1)}
+  30%{filter:brightness(1.35)}
+  100%{filter:brightness(1)}
+}
+
+@keyframes activeTabPulse{
+  0%{box-shadow:0 0 0 rgba(0,217,255,0)}
+  42%{box-shadow:0 0 22px rgba(0,217,255,.18), inset 0 0 18px rgba(0,217,255,.14)}
+  100%{box-shadow:inherit}
+}
+
+/* Cards and item adds */
+.item-card{
+  transform-origin:center center;
+}
+
+.item-card.added{
+  animation:itemAddedPulse .54s var(--kinetic-ease-out);
+}
+
+@keyframes itemAddedPulse{
+  0%{transform:scale(1); filter:brightness(1)}
+  30%{transform:scale(1.025); filter:brightness(1.28) saturate(1.12)}
+  100%{transform:scale(1); filter:brightness(1)}
+}
+
+.plus{
+  transition:transform .16s var(--kinetic-ease), box-shadow .22s ease, filter .18s ease;
+}
+
+.item-card.added .plus{
+  animation:plusSnap .5s ease-out;
+}
+
+@keyframes plusSnap{
+  0%{transform:rotate(0deg) scale(1)}
+  42%{transform:rotate(90deg) scale(1.16)}
+  100%{transform:rotate(0deg) scale(1)}
+}
+
+/* Bitstream signal reactions */
+.bitstream-drawer.kinetic-pulse{
+  animation:bitstreamSignalPulse .7s ease-out;
+}
+
+@keyframes bitstreamSignalPulse{
+  0%{box-shadow:inset 0 0 22px rgba(0,0,0,.48), 0 0 0 rgba(0,217,255,0)}
+  28%{box-shadow:inset 0 0 30px rgba(0,217,255,.10), 0 0 24px rgba(0,217,255,.12)}
+  100%{box-shadow:inset 0 0 22px rgba(0,0,0,.48), 0 0 0 rgba(0,217,255,0)}
+}
+
+.bit-tile.just-added,
+.review-conveyor-bit.just-added,
+.summary-cell.just-added{
+  animation:newBitPop .52s var(--kinetic-ease-out);
+}
+
+@keyframes newBitPop{
+  0%{transform:scale(.68); opacity:.2; filter:brightness(1.8)}
+  52%{transform:scale(1.16); opacity:1; filter:brightness(1.35)}
+  100%{transform:scale(1); filter:brightness(1)}
+}
+
+/* Review/pay entrance */
+.screen-frame.review-opening .review-list-panel,
+.screen-frame.review-opening .summary-panel{
+  animation:reviewPanelRise .62s var(--kinetic-ease-out) both;
+}
+
+.screen-frame.review-opening .summary-panel{
+  animation-delay:.06s;
+}
+
+@keyframes reviewPanelRise{
+  0%{opacity:0; transform:translateY(18px) scale(.985); filter:blur(2px)}
+  70%{opacity:1; transform:translateY(-1px) scale(1.003); filter:blur(0)}
+  100%{opacity:1; transform:translateY(0) scale(1)}
+}
+
+/* Review rows */
+.review-row{
+  transform-origin:left center;
+}
+
+.review-row.row-arrive{
+  animation:reviewRowArrive .38s var(--kinetic-ease-out) both;
+  animation-delay:var(--row-delay,0ms);
+}
+
+@keyframes reviewRowArrive{
+  0%{opacity:0; transform:translateX(-14px); filter:blur(1px)}
+  100%{opacity:1; transform:translateX(0); filter:blur(0)}
+}
+
+.review-row.drop-before,
+.review-row.drop-after{
+  animation:dropTargetPulse .45s ease-out infinite alternate;
+}
+
+@keyframes dropTargetPulse{
+  from{box-shadow:inset 0 0 0 rgba(0,217,255,0)}
+  to{box-shadow:inset 0 0 18px rgba(0,217,255,.10)}
+}
+
+/* Summary / totals updates */
+.summary-panel.summary-updating .summary-grid-wrap{
+  animation:summaryGridUpdate .46s ease-out;
+}
+
+.summary-panel.summary-updating .count-line,
+.summary-panel.summary-updating .totals{
+  animation:summaryTextUpdate .42s ease-out;
+}
+
+@keyframes summaryGridUpdate{
+  0%{filter:brightness(1); transform:scale(1)}
+  34%{filter:brightness(1.28); transform:scale(1.01)}
+  100%{filter:brightness(1); transform:scale(1)}
+}
+
+@keyframes summaryTextUpdate{
+  0%{opacity:.7; transform:translateY(3px)}
+  100%{opacity:1; transform:translateY(0)}
+}
+
+/* Button-specific energy */
+.review-btn.ready{
+  animation:reviewReadyBreath 2.8s ease-in-out infinite;
+}
+
+@keyframes reviewReadyBreath{
+  0%,100%{filter:brightness(1); box-shadow:0 0 0 rgba(0,217,255,0)}
+  50%{filter:brightness(1.12); box-shadow:0 0 20px rgba(0,217,255,.10)}
+}
+
+.complete-btn.sending{
+  animation:completeSend .72s var(--kinetic-ease-out);
+}
+
+@keyframes completeSend{
+  0%{transform:scale(1)}
+  32%{transform:scale(1.018); filter:brightness(1.25)}
+  100%{transform:scale(1); filter:brightness(1)}
+}
+
+/* Toast pop */
+.toast:not(.hidden){
+  animation:toastPop .42s var(--kinetic-ease-out);
+}
+
+@keyframes toastPop{
+  0%{opacity:0; transform:translate(-50%, 10px) scale(.96)}
+  100%{opacity:1; transform:translate(-50%, 0) scale(1)}
+}
+
+/* Reduce motion safety */
+@media (prefers-reduced-motion:reduce){
+  *,
+  *:before,
+  *:after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+    scroll-behavior:auto !important;
+  }
+}
+
+
+/* =========================================================
+   Kinetic layout safety pass
+   Keeps the added motion, but prevents press/ripple effects from
+   changing or clipping the menu/review layouts.
+   ========================================================= */
+
+/* The kinetic pass made every press target overflow:hidden. That is
+   too aggressive for cards, rows, and panels. Keep layout boxes stable. */
+.ui-press-target{
+  position:relative;
+  overflow:visible !important;
+  transform-origin:center center;
+}
+
+/* Only actual button surfaces should clip their ripple. */
+button.ui-press-target,
+.mode-tab.ui-press-target,
+.age-btn.ui-press-target,
+.review-btn.ui-press-target,
+.complete-btn.ui-press-target,
+.back-btn.ui-press-target,
+.drawer-back.ui-press-target,
+.review-top-back.ui-press-target{
+  overflow:hidden !important;
+}
+
+/* Prevent press transforms from disturbing rows/cards that are already
+   tightly laid out. The glow/ripple still provides feedback. */
+.review-row.ui-pressing{
+  transform:none !important;
+  filter:brightness(1.12) saturate(1.06);
+}
+
+.item-card.ui-pressing{
+  transform:scale(.992) !important;
+}
+
+/* Keep core containers locked to their intended layout geometry. */
+.menu-view,
+.category-mount,
+.grid,
+.review-view,
+.review-columns,
+.review-list-panel,
+.summary-panel,
+.summary-grid-wrap,
+.bitstream-drawer,
+.bitstream-viewport{
+  min-width:0 !important;
+  box-sizing:border-box !important;
+}
+
+/* Prevent kinetic transitions from causing accidental panel overflow. */
+.review-list-panel,
+.summary-panel{
+  overflow:hidden !important;
+}
+
+.review-list{
+  min-height:0 !important;
+}
+
+/* Menu content should animate internally without shifting the topbar. */
+.screen-frame.menu-switching .category-mount{
+  transform-origin:center top;
+}
+
+/* Keep review top back button in its authored location and above panels. */
+.review-top-back{
+  z-index:55 !important;
+  transform-origin:center center;
+}
+
+.review-top-back.ui-pressing{
+  transform:translateY(1px) scale(.986) !important;
+}
+
+/* Stop ripple spans from changing flex/grid sizing. */
+.press-ripple{
+  display:block !important;
+  flex:0 0 auto !important;
+}
+
+/* If a ripple is inside a card or row, keep it visually subtle and
+   non-invasive so it does not read as a layout artifact. */
+.item-card .press-ripple,
+.review-row .press-ripple{
+  opacity:.55;
+  z-index:2;
+}
+
+/* Maintain panel header / body spacing after kinetic row animations. */
+.review-list-panel h3,
+.summary-panel h3{
+  flex:0 0 auto !important;
+}
+
+.review-row.row-arrive{
+  will-change:transform, opacity;
+}
+
+/* Summary pulse should not scale the whole grid container enough to
+   crop the 64-bit matrix. Use filter only for the grid wrap. */
+.summary-panel.summary-updating .summary-grid-wrap{
+  animation:summaryGridGlowOnly .46s ease-out !important;
+}
+
+@keyframes summaryGridGlowOnly{
+  0%{filter:brightness(1)}
+  34%{filter:brightness(1.22)}
+  100%{filter:brightness(1)}
+}
+
+
+/* =========================================================
+   Plus button placement fix
+   Pins each add button to its own card instead of letting it
+   drift against the category/quest containers.
+   ========================================================= */
+
+.item-card{
+  position:relative !important;
+  overflow:hidden !important;
+}
+
+.item-card .plus,
+.plus{
+  position:absolute !important;
+  top:8px !important;
+  left:8px !important;
+  right:auto !important;
+  bottom:auto !important;
+  z-index:12 !important;
+
+  width:28px !important;
+  height:28px !important;
+  min-width:28px !important;
+  min-height:28px !important;
+  padding:0 !important;
+
+  display:grid !important;
+  place-items:center !important;
+
+  border-radius:6px !important;
+  transform:none !important;
+  line-height:1 !important;
+  font-size:22px !important;
+  font-weight:900 !important;
+}
+
+.item-card.kicker .plus{
+  border-color:rgba(255,159,39,.75) !important;
+  color:var(--amber) !important;
+  box-shadow:0 0 10px rgba(255,159,39,.16) inset, 0 0 8px rgba(255,159,39,.08) !important;
+}
+
+.item-card:not(.kicker) .plus{
+  border-color:rgba(0,217,255,.75) !important;
+  color:var(--cyan) !important;
+  box-shadow:0 0 10px rgba(0,217,255,.16) inset, 0 0 8px rgba(0,217,255,.08) !important;
+}
+
+/* Keep the displayed letter/number code independent from the plus. */
+.item-card .code{
+  z-index:8 !important;
+  pointer-events:none !important;
+}
+
+/* Kicker codes were colliding with the plus in the screenshot. */
+.item-card.kicker .code{
+  top:18px !important;
+  left:34px !important;
+}
+
+/* Quest and category cards should use the same card-local placement. */
+.quest-band .item-card .plus,
+.quest-card-grid .item-card .plus,
+.kicker-category-group .item-card .plus,
+.grid .item-card .plus{
+  top:8px !important;
+  left:8px !important;
+}
+
+/* Plus button animation restored in final refinement below. */
+
+.item-card.ui-press-target{
+  overflow:hidden !important;
+}
+
+
+/* =========================================================
+   Plus button placement refinement
+   Move add buttons to the right side so they no longer cover
+   the item code letters/numbers.
+   ========================================================= */
+
+.item-card .plus,
+.plus{
+  left:auto !important;
+  right:10px !important;
+  top:auto !important;
+  bottom:10px !important;
+}
+
+.quest-band .item-card .plus,
+.quest-card-grid .item-card .plus,
+.kicker-category-group .item-card .plus,
+.grid .item-card .plus{
+  left:auto !important;
+  right:10px !important;
+  top:auto !important;
+  bottom:10px !important;
+}
+
+/* Restore the default code position now that the plus button lives
+   on the right side again. */
+.item-card.kicker .code{
+  left:14px !important;
+  top:10px !important;
+}
+
+
+/* =========================================================
+   Plus button right-side animation restoration
+   Keeps the + buttons on the right, but restores the kinetic snap,
+   press, glow, and add feedback that the placement fix suppressed.
+   ========================================================= */
+
+.item-card .plus,
+.plus{
+  left:auto !important;
+  right:10px !important;
+  top:auto !important;
+  bottom:10px !important;
+
+  transform-origin:center center !important;
+  transition:
+    transform .16s var(--kinetic-ease, cubic-bezier(.18,.86,.2,1)),
+    filter .18s ease,
+    box-shadow .22s ease,
+    border-color .22s ease,
+    background .22s ease !important;
+}
+
+/* Pressing a card gives the plus a small mechanical button response. */
+.item-card.ui-pressing .plus{
+  transform:translateY(1px) scale(.92) !important;
+  filter:brightness(1.25) saturate(1.1) !important;
+}
+
+/* Adding an item restores the original snap/rotate behavior. */
+.item-card.added .plus{
+  animation:plusSnapRestored .52s cubic-bezier(.16,1,.24,1) !important;
+}
+
+/* Button-only press also gets a tactile pop. */
+.plus.ui-pressing{
+  transform:translateY(1px) scale(.9) !important;
+  filter:brightness(1.3) saturate(1.15) !important;
+}
+
+.plus.ui-released{
+  animation:plusReleasePop .28s cubic-bezier(.16,1,.24,1) !important;
+}
+
+@keyframes plusSnapRestored{
+  0%{transform:translateY(0) rotate(0deg) scale(1); filter:brightness(1)}
+  38%{transform:translateY(-1px) rotate(90deg) scale(1.16); filter:brightness(1.32) saturate(1.12)}
+  100%{transform:translateY(0) rotate(0deg) scale(1); filter:brightness(1)}
+}
+
+@keyframes plusReleasePop{
+  0%{transform:translateY(1px) scale(.9)}
+  58%{transform:translateY(-1px) scale(1.08)}
+  100%{transform:translateY(0) scale(1)}
+}
+
+/* Keep the glow styling by card type while on the right side. */
+.item-card.kicker .plus{
+  border-color:rgba(255,159,39,.75) !important;
+  color:var(--amber) !important;
+  box-shadow:
+    0 0 10px rgba(255,159,39,.16) inset,
+    0 0 8px rgba(255,159,39,.08) !important;
+}
+
+.item-card:not(.kicker) .plus{
+  border-color:rgba(0,217,255,.75) !important;
+  color:var(--cyan) !important;
+  box-shadow:
+    0 0 10px rgba(0,217,255,.16) inset,
+    0 0 8px rgba(0,217,255,.08) !important;
+}
+
+
+/* =========================================================
+   Hard restore of the original plus rotation snap.
+   This is triggered directly in JS on add so it cannot be
+   swallowed by press/release state classes.
+   ========================================================= */
+.plus.plus-spin{
+  animation:plusDirectQuarterTurn .52s cubic-bezier(.16,1,.24,1) !important;
+}
+
+@keyframes plusDirectQuarterTurn{
+  0%{transform:translateY(0) rotate(0deg) scale(1); filter:brightness(1)}
+  42%{transform:translateY(-1px) rotate(90deg) scale(1.16); filter:brightness(1.34) saturate(1.12)}
+  100%{transform:translateY(0) rotate(0deg) scale(1); filter:brightness(1)}
+}
+
+
+/* =========================================================
+   Plus icon spin hard fix
+   The button itself can have press transforms, so the + glyph now
+   rotates inside the button as .plus-icon. This makes the 90-degree
+   snap visible regardless of card/button press state.
+   ========================================================= */
+
+.plus{
+  display:grid !important;
+  place-items:center !important;
+}
+
+.plus .plus-icon{
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  line-height:26px !important;
+  text-align:center !important;
+  transform-origin:50% 50% !important;
+  pointer-events:none !important;
+}
+
+.plus.plus-spin .plus-icon,
+.item-card.added .plus .plus-icon{
+  animation:plusIconQuarterTurn .54s cubic-bezier(.16,1,.24,1) !important;
+}
+
+@keyframes plusIconQuarterTurn{
+  0%{
+    transform:rotate(0deg) scale(1);
+    filter:brightness(1);
+  }
+  42%{
+    transform:rotate(90deg) scale(1.22);
+    filter:brightness(1.38) saturate(1.15);
+  }
+  100%{
+    transform:rotate(0deg) scale(1);
+    filter:brightness(1);
+  }
+}
+
+
+/* =========================================================
+   Final review screen containment + top-right back button fix
+   - moves review top back button to screen-frame coordinates
+   - keeps Review Order / Order Summary fully inside the interface
+   - locks review columns to the available bounds
+   ========================================================= */
+
+/* When mounted directly under .screen-frame, keep the review top back
+   button anchored to the top-right of the interface. */
+.screen-frame > .review-top-back{
+  position:absolute !important;
+  top:30px !important;
+  right:34px !important;
+  left:auto !important;
+  bottom:auto !important;
+  z-index:70 !important;
+  margin:0 !important;
+}
+
+@media (max-height:760px){
+  .screen-frame > .review-top-back{
+    top:14px !important;
+    right:30px !important;
+  }
+}
+
+/* Review body stays fully inside the frame and below the review bitstream. */
+.screen-frame.review-open .review-view,
+.review-view{
+  position:absolute !important;
+  left:34px !important;
+  right:34px !important;
+  top:168px !important;
+  bottom:26px !important;
+  width:auto !important;
+  height:auto !important;
+  min-width:0 !important;
+  min-height:0 !important;
+  overflow:visible !important;
+  z-index:18 !important;
+}
+
+/* Authoritative two-column review layout containment. */
+.screen-frame.review-open .review-columns,
+.review-columns{
+  display:grid !important;
+  width:100% !important;
+  height:100% !important;
+  min-width:0 !important;
+  min-height:0 !important;
+  grid-template-columns:minmax(0,1.18fr) minmax(0,.82fr) !important;
+  gap:16px !important;
+  align-items:stretch !important;
+}
+
+.screen-frame.review-open .review-list-panel,
+.screen-frame.review-open .summary-panel,
+.review-list-panel,
+.summary-panel{
+  width:auto !important;
+  height:auto !important;
+  min-width:0 !important;
+  min-height:0 !important;
+  max-width:100% !important;
+  max-height:100% !important;
+  align-self:stretch !important;
+  justify-self:stretch !important;
+  overflow:hidden !important;
+}
+
+.review-list{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  overflow:auto !important;
+}
+
+@media (max-height:760px){
+  .screen-frame.review-open .review-view,
+  .review-view{
+    left:32px !important;
+    right:32px !important;
+    top:156px !important;
+    bottom:22px !important;
+  }
+
+  .screen-frame.review-open .review-columns,
+  .review-columns{
+    gap:14px !important;
+  }
+}

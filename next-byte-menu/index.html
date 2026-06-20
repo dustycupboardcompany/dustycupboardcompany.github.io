@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NEXT BYTE Menu UI Prototype</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app" class="terminal-shell">
+    <div id="screen" class="screen-frame">
+      <div class="noise"></div>
+
+      <header class="topbar">
+        <div class="brand">
+          <span class="byte-logo">BYTE</span>
+          <span class="divider"></span>
+          <div><b>BREAKROOM AT THE RIFT</b><small>CANTEEN ACCESS</small></div>
+        </div>
+
+        <section id="bitstreamDrawer" class="bitstream-drawer" aria-label="Bitstream">
+          <div class="drawer-head">
+            <div class="panel-label">BITSTREAM</div>
+            <button id="drawerBackBtn" class="drawer-back">≪ BACK TO MENU</button>
+          </div>
+          <div id="bitstreamViewport" class="bitstream-viewport">
+            <div id="bitstreamTrack" class="bitstream-track"></div>
+          </div>
+          <div id="insertGate" class="insert-gate"></div>
+          <button id="reviewBtn" class="review-btn"><span>&gt;&gt;</span> REVIEW ORDER / PAY</button>
+        </section>
+      </header>
+
+      <main id="menuView" class="menu-view">
+        <section class="navrow">
+          <button class="mode-tab active" data-mode="payload"><span class="cube-icon">⬡</span> PAYLOAD BITS</button>
+          <button class="mode-tab" data-mode="kicker"><span class="bolt-icon">ϟ</span> KICKER BITS</button>
+          <div id="ageToggle" class="age-toggle hidden">
+            <button class="age-btn active" data-age="all">ALL AGES</button>
+            <button class="age-btn" data-age="adult">21+</button>
+          </div>
+        </section>
+        <div id="categoryMount" class="category-mount"></div>
+      </main>
+
+      <main id="reviewView" class="review-view hidden">
+        <button id="reviewTopBackBtn" class="review-top-back"><span>≪</span> BACK TO MENU</button>
+        <div class="review-columns">
+          <section class="review-list-panel">
+            <h3>REVIEW ORDER</h3>
+            <div id="reviewList" class="review-list"></div>
+          </section>
+          <section class="summary-panel">
+            <h3>ORDER SUMMARY</h3>
+            <div class="summary-grid-wrap"><div id="summaryGrid" class="summary-grid"></div></div>
+            <div id="countLine" class="count-line"></div>
+            <div class="totals">
+              <div><span>SUBTOTAL</span><b id="subtotal">$0.00</b></div>
+              <div><span>TAX (8.75%)</span><b id="tax">$0.00</b></div>
+              <div class="total-row"><span>TOTAL</span><b id="total">$0.00</b></div>
+            </div>
+            <button id="completeBtn" class="complete-btn"><span>&gt;&gt;</span> COMPLETE ORDER <small>PROCEED TO PAYMENT</small></button>
+            <button id="summaryBackBtn" class="back-btn"><span>≪</span> BACK TO MENU</button>
+          </section>
+        </div>
+      </main>
+
+      <div id="toast" class="toast hidden"></div>
+    </div>
+  </div>
+
+  <script src="menu-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
