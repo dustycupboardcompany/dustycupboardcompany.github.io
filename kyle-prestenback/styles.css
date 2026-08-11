@@ -311,6 +311,10 @@ a:focus-visible { outline: 3px solid var(--signal); outline-offset: 4px; }
 .story-study-grid { display: grid; grid-template-columns: .9fr 1.1fr; align-items: stretch; gap: 45px; }
 .story-study-grid img { height: 100%; min-height: 310px; object-fit: cover; }
 .story-study-grid .story-note { margin-top: 22px; }
+.story-undergrad-media { display: grid; grid-template-columns: .8fr 1.2fr; gap: 12px; }
+.story-undergrad-media figure { margin: 0; overflow: hidden; }
+.story-undergrad-media figure:first-child img { object-position: center; }
+.story-undergrad-media figure:last-child img { object-position: center; }
 .story-correction { max-width: 760px; margin: -18px 0 38px; color: #ffd25c; font-size: clamp(19px, 1.8vw, 26px); font-weight: 700; }
 .twin-grid img { height: 335px; object-position: top center; }
 .story-logo-row { display: grid; grid-template-columns: repeat(2, 1fr); align-items: center; gap: 35px; }
