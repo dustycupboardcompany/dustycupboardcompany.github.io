@@ -329,6 +329,9 @@ a:focus-visible { outline: 3px solid var(--signal); outline-offset: 4px; }
 .story-career-columns p { margin: 0; color: rgba(255,255,255,.75); font-size: 15px; }
 .story-banner { margin-top: 34px; }
 .story-banner img { height: 210px; object-fit: cover; }
+.story-wdi-collage { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.story-wdi-collage figure { display: grid; place-items: center; margin: 0; overflow: hidden; background: #a7a7a4; }
+.story-wdi-collage img { width: 100%; height: 190px; object-fit: contain; }
 .origin-next { padding-block: 110px; background: var(--nextbyte); border-top: 1px solid var(--ink); }
 .origin-next-grid { display: grid; grid-template-columns: 1fr 3fr; gap: 30px; }
 .origin-next-main h2 { max-width: 1080px; margin: -9px 0 38px; font-size: clamp(50px, 7vw, 105px); line-height: .88; letter-spacing: -.06em; }
@@ -465,6 +468,8 @@ a:focus-visible { outline: 3px solid var(--signal); outline-offset: 4px; }
   .story-logo-row figure { min-height: 150px; }
   .story-logo-row.graduate figure:last-child img { height: 260px; }
   .story-banner img { height: auto; aspect-ratio: 16 / 9; }
+  .story-wdi-collage { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .story-wdi-collage img { height: 135px; }
   .origin-next { padding-block: 75px; }
   .origin-next-main h2 { margin-top: 0; }
   .origin-next-cards article { min-height: 0; }
