@@ -19,7 +19,7 @@ function fitBookToWindow() {
   const spreadRatio = pageRatio * 2;
   const ratio = twoPageView ? spreadRatio : pageRatio;
   const stageWidth = stage.getBoundingClientRect().width;
-  const verticalChrome = window.innerWidth <= 540 ? 175 : 168;
+  const verticalChrome = window.innerWidth <= 900 ? 210 : 168;
   const heightLimit = Math.max(280, window.innerHeight - verticalChrome);
   const width = Math.min(stageWidth, heightLimit * ratio);
   book.style.width = `${Math.floor(width)}px`;
