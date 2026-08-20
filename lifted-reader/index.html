@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#14172d" />
+    <title>Anytime Inc. - An Interactive Reader</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="grain"></div>
+    <div class="stars" aria-hidden="true"></div>
+    <main class="app">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Return to cover">
+          <span class="brand-mark">A</span><span>ANYTIME<span class="accent">.</span> INC</span>
+        </a>
+        <div class="reading-status"><span class="pulse"></span> ELEVATOR ONLINE</div>
+        <a class="steam-cta top-steam" href="https://store.steampowered.com/app/2184020/LIFTED/" target="_blank" rel="noopener">BUY <span>LIFTED</span> ON STEAM ↗</a>
+        <button class="view-toggle" id="viewToggle" aria-pressed="false" title="Switch to two-page view">1-UP</button>
+        <button class="icon-button" id="infoButton" aria-label="About this reader">i</button>
+      </header>
+
+      <section class="reader-shell" aria-label="Anytime Inc. book reader">
+        <aside class="elevator" aria-label="Time navigation">
+          <div class="elevator-top"><span>ANYTIME</span><b>ELEVATOR</b></div>
+          <div class="floor-window"><span>FLOOR</span><strong id="floorDisplay">001</strong></div>
+          <div class="floor-track" id="floorTrack" aria-label="Choose a page"></div>
+          <div class="media-buttons">
+            <button id="galleryButton" title="Open LIFTED image gallery">▧ <span>SCENES</span></button>
+            <button id="trailerButton" title="Play the LIFTED cinematic trailer">▶ <span>TRAILER</span></button>
+          </div>
+          <button id="goStart" class="round-button" title="Go to beginning">⌂</button>
+          <div class="elevator-label">TIME / SPACE<br>TRANSIT</div>
+        </aside>
+
+        <div class="stage">
+          <div class="game-art-echo" aria-hidden="true"></div>
+          <div class="chapter-label" id="chapterLabel">THE BEGINNING</div>
+          <button class="page-hit previous" id="prevButton" aria-label="Previous page"><span>‹</span></button>
+          <div class="book-shadow"></div>
+          <article class="book" id="book">
+            <div class="paper-edge"></div>
+            <img id="pageImage" class="book-page" src="pages/page-001.jpg" alt="Anytime Inc. page 1" />
+            <img id="pageImageRight" class="book-page right-page" src="pages/page-002.jpg" alt="Anytime Inc. page 2" />
+            <div class="turn-overlay" id="turnOverlay"></div>
+          </article>
+          <button class="page-hit next" id="nextButton" aria-label="Next page"><span>›</span></button>
+          <div class="tap-hint">← / → to travel</div>
+        </div>
+
+        <aside class="console" aria-label="Reader controls">
+          <div class="console-title">MISSION LOG</div>
+          <div class="progress-readout"><span>PAGE</span><strong id="pageReadout">001</strong><small>/ 254</small></div>
+          <div class="progress"><div id="progressFill"></div></div>
+          <label class="jump-label" for="pageInput">JUMP TO A YEAR</label>
+          <div class="jump-control"><input id="pageInput" type="number" min="1" max="254" value="1" inputmode="numeric" /><button id="jumpButton">GO</button></div>
+          <button id="fullscreenButton" class="utility-button">▣ &nbsp; FOCUS READING</button>
+          <a class="steam-cta steam-card" href="https://store.steampowered.com/app/2184020/LIFTED/" target="_blank" rel="noopener">
+            <img src="assets/lifted-header.jpg" alt="LIFTED game artwork" />
+            <span class="steam-card-copy"><small>START THE HEIST</small><b>BUY LIFTED<br>ON STEAM ↗</b></span>
+          </a>
+          <div class="console-note">THE FLOORS ARE YEARS.<br>THE PAGES ARE WORLDS.</div>
+        </aside>
+      </section>
+    </main>
+
+    <dialog id="infoDialog">
+      <button class="dialog-close" id="closeInfo" aria-label="Close">×</button>
+      <p class="eyebrow">AN INTERACTIVE EDITION</p>
+      <h1>Anytime Inc.</h1>
+      <p>By J.R. Ashbrook</p>
+      <p class="dialog-copy">A locally hosted reading room inspired by the cinematic, time-traveling world of <em>LIFTED</em>. Use the elevator panel, the arrow keys, or the page edges to travel.</p>
+    </dialog>
+    <dialog id="mediaDialog" class="media-dialog">
+      <button class="dialog-close" id="closeMedia" aria-label="Close">×</button>
+      <div id="galleryView">
+        <p class="eyebrow">ANYTIME ELEVATOR · VISUAL ARCHIVE</p>
+        <h2>LIFTED: SCENES FROM THE HEIST</h2>
+        <div class="gallery-stage">
+          <button id="galleryPrevious" aria-label="Previous image">‹</button>
+          <img id="galleryImage" src="assets/gallery/scene-01.jpg" alt="LIFTED screenshot" />
+          <button id="galleryNext" aria-label="Next image">›</button>
+        </div>
+        <div class="gallery-footer"><span id="galleryCount">01 / 06</span><span>OFFICIAL STEAM SCREENSHOTS</span></div>
+      </div>
+      <div id="trailerView" hidden>
+        <p class="eyebrow">ANYTIME ELEVATOR · CINEMATIC TRANSMISSION</p>
+        <h2>LIFTED: CINEMATIC STORY TRAILER</h2>
+        <video id="trailerVideo" controls preload="metadata" poster="assets/gallery/scene-01.jpg"><source src="assets/lifted-cinematic-trailer.mp4" type="video/mp4" />Your browser does not support video playback.</video>
+        <div class="gallery-footer"><span>LOCAL PLAYBACK</span><span>OFFICIAL STEAM TRAILER</span></div>
+      </div>
+    </dialog>
+    <script src="reader.js"></script>
+  </body>
+</html>
