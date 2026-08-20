@@ -19,7 +19,7 @@ function fitBookToWindow() {
   const spreadRatio = pageRatio * 2;
   const ratio = twoPageView ? spreadRatio : pageRatio;
   const stageWidth = stage.getBoundingClientRect().width;
-  const verticalChrome = window.innerWidth <= 900 ? 210 : 168;
+  const verticalChrome = window.innerWidth <= 900 ? 125 : 168;
   const heightLimit = Math.max(280, window.innerHeight - verticalChrome);
   const width = Math.min(stageWidth, heightLimit * ratio);
   book.style.width = `${Math.floor(width)}px`;
@@ -47,19 +47,24 @@ function setPage(next, direction = 'next') {
 }
 stops.forEach(stop => {
   const button = document.createElement('button'); button.textContent = String(stop).padStart(3, '0'); button.dataset.page = stop; button.title = `Travel to page ${stop}`;
-  button.addEventListener('click', () => setPage(stop)); floorTrack.append(button);
+  button.addEventListener('click', () => { setPage(stop); if (window.innerWidth <= 900) setElevatorOpen(false); }); floorTrack.append(button);
 });
 document.querySelector('#nextButton').addEventListener('click', () => setPage(page + (twoPageView ? 2 : 1)));
 document.querySelector('#prevButton').addEventListener('click', () => setPage(page - (twoPageView ? 2 : 1), 'prev'));
 document.querySelector('#goStart').addEventListener('click', () => setPage(1));
 document.querySelector('#jumpButton').addEventListener('click', () => setPage(pageInput.value));
 pageInput.addEventListener('keydown', event => { if (event.key === 'Enter') setPage(pageInput.value); });
-window.addEventListener('keydown', event => { if (event.target.tagName === 'INPUT') return; if (event.key === 'ArrowRight' || event.key === ' ') { event.preventDefault(); setPage(page + (twoPageView ? 2 : 1)); } if (event.key === 'ArrowLeft') { event.preventDefault(); setPage(page - (twoPageView ? 2 : 1), 'prev'); } if (event.key === 'Home') setPage(1); });
+window.addEventListener('keydown', event => { if (event.target.tagName === 'INPUT') return; if (elevatorMenu?.classList.contains('open')) { if (event.key === 'Escape') setElevatorOpen(false); return; } if (event.key === 'ArrowRight' || event.key === ' ') { event.preventDefault(); setPage(page + (twoPageView ? 2 : 1)); } if (event.key === 'ArrowLeft') { event.preventDefault(); setPage(page - (twoPageView ? 2 : 1), 'prev'); } if (event.key === 'Home') setPage(1); });
 const viewToggle = document.querySelector('#viewToggle');
 viewToggle.addEventListener('click', () => { twoPageView = !twoPageView; book.classList.toggle('spread', twoPageView); viewToggle.textContent = twoPageView ? '2-UP' : '1-UP'; viewToggle.setAttribute('aria-pressed', twoPageView); viewToggle.title = twoPageView ? 'Switch to one-page view' : 'Switch to two-page view'; localStorage.setItem('anytime-two-page', twoPageView); fitBookToWindow(); setPage(page); });
 document.querySelector('#infoButton').addEventListener('click', () => document.querySelector('#infoDialog').showModal());
 document.querySelector('#closeInfo').addEventListener('click', () => document.querySelector('#infoDialog').close());
 document.querySelector('#fullscreenButton').addEventListener('click', () => document.querySelector('.stage').requestFullscreen?.());
+const elevatorToggle = document.querySelector('#elevatorToggle');
+const elevatorMenu = document.querySelector('#elevatorMenu');
+function setElevatorOpen(open) { elevatorMenu.classList.toggle('open', open); elevatorToggle.setAttribute('aria-expanded', open); document.body.classList.toggle('elevator-open', open); }
+elevatorToggle.addEventListener('click', () => setElevatorOpen(true));
+document.querySelector('#closeElevator').addEventListener('click', () => setElevatorOpen(false));
 const mediaDialog = document.querySelector('#mediaDialog');
 const galleryView = document.querySelector('#galleryView');
 const trailerView = document.querySelector('#trailerView');

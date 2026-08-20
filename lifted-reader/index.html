@@ -17,12 +17,14 @@
         </a>
         <div class="reading-status"><span class="pulse"></span> ELEVATOR ONLINE</div>
         <a class="steam-cta top-steam" href="https://store.steampowered.com/app/2184020/LIFTED/" target="_blank" rel="noopener">BUY <span>LIFTED</span> ON STEAM ↗</a>
+        <button class="elevator-toggle" id="elevatorToggle" aria-expanded="false" aria-controls="elevatorMenu" title="Open elevator menu"><i></i><i></i><i></i><span>MENU</span></button>
         <button class="view-toggle" id="viewToggle" aria-pressed="false" title="Switch to two-page view">1-UP</button>
         <button class="icon-button" id="infoButton" aria-label="About this reader">i</button>
       </header>
 
       <section class="reader-shell" aria-label="Anytime Inc. book reader">
-        <aside class="elevator" aria-label="Time navigation">
+        <aside class="elevator" id="elevatorMenu" aria-label="Time navigation">
+          <button class="close-elevator" id="closeElevator" aria-label="Close elevator menu">×</button>
           <div class="elevator-top"><span>ANYTIME</span><b>ELEVATOR</b></div>
           <div class="floor-window"><span>FLOOR</span><strong id="floorDisplay">001</strong></div>
           <div class="floor-track" id="floorTrack" aria-label="Choose a page"></div>
